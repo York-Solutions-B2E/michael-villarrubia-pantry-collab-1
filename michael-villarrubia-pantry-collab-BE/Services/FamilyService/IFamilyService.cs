@@ -6,6 +6,7 @@ namespace michael_villarrubia_pantry_collab_BE.Services.FamilyService
     {
         Task<Family> CreateFamily(FamilyDTO family, string userCreatingFamily);
 
-        Task<Family> JoinFamily(string code, int userId);
+        Task<Family> JoinFamily(string code, string password, int userId);
+        Task DeleteFamily(int familyId);
     }
 }

@@ -2,6 +2,7 @@ global using Microsoft.EntityFrameworkCore;
 global using michael_villarrubia_pantry_collab_BE.Models;
 using michael_villarrubia_pantry_collab_BE.Services.UserService;
 using michael_villarrubia_pantry_collab_BE.Services.FamilyService;
+using michael_villarrubia_pantry_collab_BE.Services.PantryService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,7 @@ builder.Services.AddDbContext<michael_villarrubia_pantry_collab_BE.DataContext>(
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IFamilyService, FamilyService>();
+builder.Services.AddScoped<IPantryService , PantryService>();
 
 var app = builder.Build();
 

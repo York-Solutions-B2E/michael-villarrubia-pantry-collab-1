@@ -30,13 +30,27 @@ namespace michael_villarrubia_pantry_collab_BE.Controllers
         }
 
         [HttpPatch("join")]
-        public async Task<ActionResult<Family>> JoinFamily(string code, int userId)
+        public async Task<ActionResult<Family>> JoinFamily(string code, string password, int userId)
         {
             try
             {
-                return Ok(await _familyService.JoinFamily(code, userId));
+                return Ok(await _familyService.JoinFamily(code, password, userId));
             }
             catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete("delete")]
+        public async Task<ActionResult> DeleteFamily(int familyId)
+        {
+            try
+            {
+                await _familyService.DeleteFamily(familyId);
+                return Ok();
+            }
+            catch (Exception e )
             {
                 return BadRequest(e.Message);
             }
