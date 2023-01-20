@@ -24,7 +24,21 @@ namespace michael_villarrubia_pantry_collab_BE.Controllers
         {
             try
             {
-                return Ok(await ingredientService.AddIngredient(quantity, ingredientRequest, recipeId));
+                var ingredient = await ingredientService.AddIngredient(quantity, ingredientRequest, recipeId);
+                return Ok(ingredient);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("showIngredients")]
+        public async Task<ActionResult<List<Ingredient>>> GetUsedIngredients(int familyId, string itemName)
+        {
+            try
+            {
+                return Ok(await ingredientService.GetUsedIngredients(familyId, itemName));
             }
             catch (Exception e)
             {

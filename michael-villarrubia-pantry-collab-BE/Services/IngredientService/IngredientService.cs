@@ -16,14 +16,18 @@ namespace michael_villarrubia_pantry_collab_BE.Services.IngredientService
         {
             var ingredient = await _context.Ingredients
                 .Include(i => i.Recipes)
+                .AsSplitQuery()
                 .Include(i => i.RecipeIngredients)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync(i => i.Name == ingredientRequest.Name);
             
             var recipe = await _context.Recipes
                 .Include(r => r.Ingredients)
+                .AsSplitQuery()
                 .Include(r => r.RecipeIngredients)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync(r => r.Id == recipeId);
-            
+
             if(recipe == null)
             {
                 throw new Exception("You must create a recipe to add ingredients to it!");
@@ -37,32 +41,51 @@ namespace michael_villarrubia_pantry_collab_BE.Services.IngredientService
                     UnitOfMeasurement = ingredientRequest.UnitOfMeasurement,
                 };
                 
-                ingredient.Recipes.Add(recipe);
                 _context.Ingredients.Add(ingredient);
-                await _context.SaveChangesAsync();
             }
 
+            var recipeIngredient = new RecipeIngredient
+            {
+                Ingredient = ingredient,
+                Recipe = recipe,
+                Quantity = quantity,
+            };
+
+            recipe.RecipeIngredients.Add(recipeIngredient);
+            ingredient.RecipeIngredients.Add(recipeIngredient);
+
             recipe.Ingredients.Add(ingredient);
-            
+            ingredient.Recipes.Add(recipe);
+
             await _context.SaveChangesAsync();
-            ingredient = await ChangeQuantityAsync(ingredient.Id, recipe.Id, quantity);
 
             return ingredient;
         }
 
         public async Task<Ingredient> ChangeQuantityAsync(int ingredientId, int recipeId, int quantity)
         {
-            var ingredient = await _context.Ingredients
+            
+            var ingredientTask = _context.Ingredients
+                .Include(i => i.Recipes)
                 .Include(i => i.RecipeIngredients)
                 .FirstOrDefaultAsync(i => i.Id == ingredientId);
 
-            var recipe = await _context.Recipes
+            await ingredientTask;
+            
+            var recipeTask = _context.Recipes
+                .Include(r => r.Ingredients)
                 .Include(r => r.RecipeIngredients)
                 .FirstOrDefaultAsync(r => r.Id == recipeId);
+
+            await recipeTask;
+
+            var ingredient = ingredientTask.Result;
+            var recipe = recipeTask.Result;
+
             if (recipe != null && ingredient != null)
             {
                 var recipeIngredient = ingredient.RecipeIngredients.Find
-                    (ri => ri.IngredientId == ingredient.Id && ri.RecipeId == recipeId);
+                    (ri => ri.IngredientId == ingredient.Id && ri.RecipeId == recipe.Id);
 
                 if(recipeIngredient != null)
                 {
@@ -75,6 +98,31 @@ namespace michael_villarrubia_pantry_collab_BE.Services.IngredientService
             }
 
             throw new Exception("Recipe or ingredient not found");
+        }
+
+        public async Task<List<Ingredient>> GetUsedIngredients(int familyId, string itemName)
+        {
+            var family = await _context.Families
+                .Include(f => f.Pantry)
+                .ThenInclude(p => p.Items)
+                .Include(f => f.Recipes)
+                .ThenInclude(r => r.Ingredients)
+                .FirstOrDefaultAsync(f => f.Id == familyId);
+
+            if(family != null)
+            {
+                var recipe = family.Recipes.ToList().Find(r => r.Name == itemName);
+                
+                if (recipe != null)
+                {
+                    var ingredients = recipe.Ingredients.ToList();
+                    return ingredients;
+                }
+
+                return new List<Ingredient>();
+            }
+
+            throw new Exception("Family not found");
         }
     }
 }
