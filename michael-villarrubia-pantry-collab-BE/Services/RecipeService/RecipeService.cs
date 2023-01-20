@@ -54,6 +54,7 @@ namespace michael_villarrubia_pantry_collab_BE.Services.RecipeService
         {
             var family = await _context.Families
                 .Include(f => f.Recipes)
+                .ThenInclude(r => r.RecipeIngredients)
                 .FirstOrDefaultAsync(f => f.Id == familyId);
 
             if (family != null)

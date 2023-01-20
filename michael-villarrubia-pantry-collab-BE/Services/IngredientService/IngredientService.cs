@@ -1,4 +1,5 @@
 ﻿using michael_villarrubia_pantry_collab_BE.DTOs;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace michael_villarrubia_pantry_collab_BE.Services.IngredientService
 {
@@ -15,10 +16,12 @@ namespace michael_villarrubia_pantry_collab_BE.Services.IngredientService
         {
             var ingredient = await _context.Ingredients
                 .Include(i => i.Recipes)
+                .Include(i => i.RecipeIngredients)
                 .FirstOrDefaultAsync(i => i.Name == ingredientRequest.Name);
             
             var recipe = await _context.Recipes
                 .Include(r => r.Ingredients)
+                .Include(r => r.RecipeIngredients)
                 .FirstOrDefaultAsync(r => r.Id == recipeId);
             
             if(recipe == null)
@@ -42,8 +45,36 @@ namespace michael_villarrubia_pantry_collab_BE.Services.IngredientService
             recipe.Ingredients.Add(ingredient);
             
             await _context.SaveChangesAsync();
+            ingredient = await ChangeQuantityAsync(ingredient.Id, recipe.Id, quantity);
 
             return ingredient;
+        }
+
+        public async Task<Ingredient> ChangeQuantityAsync(int ingredientId, int recipeId, int quantity)
+        {
+            var ingredient = await _context.Ingredients
+                .Include(i => i.RecipeIngredients)
+                .FirstOrDefaultAsync(i => i.Id == ingredientId);
+
+            var recipe = await _context.Recipes
+                .Include(r => r.RecipeIngredients)
+                .FirstOrDefaultAsync(r => r.Id == recipeId);
+            if (recipe != null && ingredient != null)
+            {
+                var recipeIngredient = ingredient.RecipeIngredients.Find
+                    (ri => ri.IngredientId == ingredient.Id && ri.RecipeId == recipeId);
+
+                if(recipeIngredient != null)
+                {
+                    recipeIngredient.Quantity = quantity;
+                    await _context.SaveChangesAsync();
+                    return ingredient;
+                }
+
+                throw new Exception("Ingredient wasn't found for this recipe");
+            }
+
+            throw new Exception("Recipe or ingredient not found");
         }
     }
 }
