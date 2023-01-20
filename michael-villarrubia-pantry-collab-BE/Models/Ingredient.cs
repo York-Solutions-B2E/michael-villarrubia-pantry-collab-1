@@ -2,16 +2,13 @@
 
 namespace michael_villarrubia_pantry_collab_BE.Models
 {
-    public class Family
+    public class Ingredient
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public string Code { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
-        public List<User> Users { get; set; }
-        [JsonIgnore]
-        public Pantry Pantry { get; set; } = new Pantry();
+        public string UnitOfMeasurement { get; set; } = string.Empty;
         [JsonIgnore]
         public ICollection<Recipe> Recipes { get; set; } = new List<Recipe>();
+        public List<RecipeIngredient> RecipeIngredients { get; set;} = new List<RecipeIngredient>();
     }
 }

@@ -12,8 +12,8 @@ using michael_villarrubia_pantry_collab_BE;
 namespace michael_villarrubia_pantry_collab_BE.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230119182343_familypassword")]
-    partial class familypassword
+    [Migration("20230120010848_RecipeIngredient")]
+    partial class RecipeIngredient
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,6 +49,27 @@ namespace michael_villarrubia_pantry_collab_BE.Migrations
                     b.ToTable("Families");
                 });
 
+            modelBuilder.Entity("michael_villarrubia_pantry_collab_BE.Models.Ingredient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UnitOfMeasurement")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Ingredients");
+                });
+
             modelBuilder.Entity("michael_villarrubia_pantry_collab_BE.Models.Pantry", b =>
                 {
                     b.Property<int>("Id")
@@ -65,7 +86,7 @@ namespace michael_villarrubia_pantry_collab_BE.Migrations
                     b.HasIndex("FamilyId")
                         .IsUnique();
 
-                    b.ToTable("Pantry");
+                    b.ToTable("Pantries");
                 });
 
             modelBuilder.Entity("michael_villarrubia_pantry_collab_BE.Models.PantryItem", b =>
@@ -100,7 +121,50 @@ namespace michael_villarrubia_pantry_collab_BE.Migrations
 
                     b.HasIndex("PantryId");
 
-                    b.ToTable("PantryItem");
+                    b.ToTable("PantryItems");
+                });
+
+            modelBuilder.Entity("michael_villarrubia_pantry_collab_BE.Models.Recipe", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Instructions")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Recipes");
+                });
+
+            modelBuilder.Entity("michael_villarrubia_pantry_collab_BE.Models.RecipeIngredient", b =>
+                {
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IngredientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("RecipeId", "IngredientId");
+
+                    b.HasIndex("IngredientId");
+
+                    b.ToTable("RecipeIngredient");
                 });
 
             modelBuilder.Entity("michael_villarrubia_pantry_collab_BE.Models.User", b =>
@@ -151,6 +215,25 @@ namespace michael_villarrubia_pantry_collab_BE.Migrations
                     b.Navigation("Pantry");
                 });
 
+            modelBuilder.Entity("michael_villarrubia_pantry_collab_BE.Models.RecipeIngredient", b =>
+                {
+                    b.HasOne("michael_villarrubia_pantry_collab_BE.Models.Ingredient", "Ingredient")
+                        .WithMany("RecipeIngredients")
+                        .HasForeignKey("IngredientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("michael_villarrubia_pantry_collab_BE.Models.Recipe", "Recipe")
+                        .WithMany("RecipeIngredients")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ingredient");
+
+                    b.Navigation("Recipe");
+                });
+
             modelBuilder.Entity("michael_villarrubia_pantry_collab_BE.Models.User", b =>
                 {
                     b.HasOne("michael_villarrubia_pantry_collab_BE.Models.Family", null)
@@ -166,9 +249,19 @@ namespace michael_villarrubia_pantry_collab_BE.Migrations
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("michael_villarrubia_pantry_collab_BE.Models.Ingredient", b =>
+                {
+                    b.Navigation("RecipeIngredients");
+                });
+
             modelBuilder.Entity("michael_villarrubia_pantry_collab_BE.Models.Pantry", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("michael_villarrubia_pantry_collab_BE.Models.Recipe", b =>
+                {
+                    b.Navigation("RecipeIngredients");
                 });
 #pragma warning restore 612, 618
         }
