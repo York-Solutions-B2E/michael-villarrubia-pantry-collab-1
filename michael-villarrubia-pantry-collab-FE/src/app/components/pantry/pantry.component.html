@@ -1,1 +1,15 @@
-<p *ngFor="let item of pantry.items">{{ item.name }}</p>
+<button
+  mat-raised-button
+  color="primary"
+  class="addItem"
+  matBadgePosition="before"
+  matBadge="+"
+  matBadgeColor="accent"
+>
+  Add Item
+</button>
+<app-pantry-item
+  [pantryItem]="item"
+  *ngFor="let item of pantry.items"
+  class="item"
+></app-pantry-item>

@@ -8,9 +8,14 @@ import { showPage } from 'src/app/showPage';
   styleUrls: ['./create-family.component.css'],
 })
 export class CreateFamilyComponent {
+  name: string = '';
   constructor(private uiService: UiService) {}
 
   goToJoinFamily(): void {
     this.uiService.$currentPage.next(showPage.joinFamily);
+  }
+
+  createFamily(): void {
+    this.uiService.createFamily(this.name);
   }
 }

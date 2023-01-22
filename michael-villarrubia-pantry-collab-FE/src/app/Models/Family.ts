@@ -6,7 +6,6 @@ export class Family {
     public id: number,
     public name: string,
     public code: string,
-    public password: string,
     public recipes: any[],
     public sentInvitations: any[],
     public receivedInvitations: any[]

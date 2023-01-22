@@ -1,7 +1,11 @@
 <mat-toolbar color="primary">
   <div *ngIf="currPage == 'login' || currPage == 'register'">Pantry Collab</div>
-  <div *ngIf="currPage == 'pantry'">The {{ familyName }}'s Pantry</div>
+  <button mat-button *ngIf="currPage == 'pantry'">
+    <mat-icon>shopping_basket</mat-icon> The {{ familyName }}'s Pantry
+  </button>
   <span class="spacer"></span>
   <span class="spacer"></span>
-  <button mat-button (click)="logout()">Logout</button>
+  <button mat-button (click)="logout()">
+    Logout <mat-icon>exit_to_app</mat-icon>
+  </button>
 </mat-toolbar>

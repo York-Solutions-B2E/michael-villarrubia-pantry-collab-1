@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Observable, ReplaySubject, take } from 'rxjs';
 import { Family } from '../Models/Family';
 import { Pantry } from '../Models/Pantry';
+import { PantryItem } from '../Models/PantryItem';
 import { User } from '../Models/User';
 import { showPage } from '../showPage';
 
@@ -18,7 +19,7 @@ export class UiService {
   $currentPage = new BehaviorSubject<showPage>(showPage.register);
 
   $pantry = new BehaviorSubject<Pantry>(new Pantry(0, [], 0));
-  $family = new BehaviorSubject<Family>(new Family(0, '', '', '', [], [], []));
+  $family = new BehaviorSubject<Family>(new Family(0, '', '', [], [], []));
 
   constructor(private http: HttpClient, public _snackbar: MatSnackBar) {}
 
@@ -78,7 +79,24 @@ export class UiService {
 
   getPantry(familyId: number): void {
     this.http
-      .get<Pantry>(`https://localhost:7201/api/Pantries/?familyId=${familyId}`)
+      .get<Pantry>(`https://localhost:7201/api/Pantries?familyId=${familyId}`)
+      .pipe(take(1))
+      .subscribe({
+        next: (pantry) => {
+          this.$pantry.next(pantry);
+        },
+        error: (err) => {
+          this.openSnackBar(err.error);
+        },
+      });
+  }
+
+  addItemToPantry(item: PantryItem): void {
+    this.http
+      .post<Pantry>(
+        `https://localhost:7201/api/Pantries/addItem?familyId=${this.$familyId.value}`,
+        item
+      )
       .pipe(take(1))
       .subscribe({
         next: (pantry) => {
@@ -106,6 +124,26 @@ export class UiService {
       .patch<Family>(
         `https://localhost:7201/api/Families/join?code=${code}&userId=${this.$userId.value}`,
         {}
+      )
+      .pipe(take(1))
+      .subscribe({
+        next: (family) => {
+          this.$family.next(family);
+          this.$familyId.next(family.id);
+          this.getPantry(family.id);
+          this.$currentPage.next(showPage.pantry);
+        },
+        error: (err) => {
+          this.openSnackBar(err.error);
+        },
+      });
+  }
+
+  createFamily(name: string) {
+    this.http
+      .post<Family>(
+        `https://localhost:7201/api/Families/create?userId=${this.$userId.value}`,
+        { name: name }
       )
       .pipe(take(1))
       .subscribe({

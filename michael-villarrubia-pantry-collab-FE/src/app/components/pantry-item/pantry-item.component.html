@@ -1,0 +1,30 @@
+<mat-card>
+  <mat-card-header class="itemName">
+    <mat-card-title>
+      <b>{{ pantryItem.name }}</b>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <img src="{{ pantryItem.image }}" class="itemImage" />
+    <div class="itemQuantities">
+      Quantity: {{ pantryItem.quantityInPantry }}
+    </div>
+    <div class="itemDetails">
+      Total Calories: {{ pantryItem.calories }} cal(s)
+    </div>
+    <div class="itemDetails">Total Weight: {{ pantryItem.weight }} gram(s)</div>
+    <div class="itemQuantities" *ngIf="pantryItem.quantityInPantry > 1">
+      Per Item Details:
+    </div>
+    <div class="itemDetails">
+      Calories:
+      {{ pantryItem.calories / pantryItem.quantityInPantry }}
+      cal(s)
+    </div>
+    <div class="itemDetails">
+      Weight:
+      {{ pantryItem.weight / pantryItem.quantityInPantry }}
+      gram(s)
+    </div>
+  </mat-card-content>
+</mat-card>
