@@ -16,6 +16,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "Angular", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+    });
+});
+
 builder.Services.AddDbContext<michael_villarrubia_pantry_collab_BE.DataContext>(options =>
 {
     options.UseSqlServer("Server=localhost;Initial Catalog=PantryBE;Integrated Security=False;User Id=sa;Password=Your_password123;MultipleActiveResultSets=True");
@@ -42,5 +50,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("Angular");
 
 app.Run();

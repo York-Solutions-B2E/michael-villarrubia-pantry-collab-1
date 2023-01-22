@@ -1,10 +1,12 @@
 ﻿using michael_villarrubia_pantry_collab_BE.DTOs;
 using michael_villarrubia_pantry_collab_BE.Services.UserService;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace michael_villarrubia_pantry_collab_BE.Controllers
 {
+    [EnableCors("Angular")]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase

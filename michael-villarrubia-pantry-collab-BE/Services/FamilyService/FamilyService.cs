@@ -89,5 +89,17 @@ namespace michael_villarrubia_pantry_collab_BE.Services.FamilyService
             }
             throw new Exception("Family doesn't exist");
         }
+
+        public async Task<Family> GetFamily(int familyId)
+        {
+            var family = await _context.Families
+                .FirstOrDefaultAsync(f => f.Id == familyId); 
+
+            if(family == null)
+            {
+                throw new Exception("Family not found");
+            }
+            return family;
+        }
     }
 }

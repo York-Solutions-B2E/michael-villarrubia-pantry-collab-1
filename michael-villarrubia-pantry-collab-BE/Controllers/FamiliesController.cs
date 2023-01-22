@@ -1,10 +1,12 @@
 ﻿using michael_villarrubia_pantry_collab_BE.DTOs;
 using michael_villarrubia_pantry_collab_BE.Services.FamilyService;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace michael_villarrubia_pantry_collab_BE.Controllers
 {
+    [EnableCors("Angular")]
     [Route("api/[controller]")]
     [ApiController]
     public class FamiliesController : ControllerBase
@@ -30,7 +32,7 @@ namespace michael_villarrubia_pantry_collab_BE.Controllers
         }
 
         [HttpPatch("join")]
-        public async Task<ActionResult<Family>> JoinFamily(string code, string password, int userId)
+        public async Task<ActionResult<Family>> JoinFamily(string code, [FromBody] string password, int userId)
         {
             try
             {
@@ -53,6 +55,19 @@ namespace michael_villarrubia_pantry_collab_BE.Controllers
             catch (Exception e )
             {
                 return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<Family>> GetFamily(int familyId)
+        {
+            try
+            {
+                return Ok(await _familyService.GetFamily(familyId));
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
             }
         }
     }

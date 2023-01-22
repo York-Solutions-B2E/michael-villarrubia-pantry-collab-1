@@ -1,9 +1,11 @@
 ﻿using michael_villarrubia_pantry_collab_BE.Services.InvitationService;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace michael_villarrubia_pantry_collab_BE.Controllers
 {
+    [EnableCors("Angular")]
     [Route("api/[controller]")]
     [ApiController]
     public class InvitationsController : ControllerBase

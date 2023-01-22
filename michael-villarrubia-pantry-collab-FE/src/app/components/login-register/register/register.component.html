@@ -1,0 +1,23 @@
+<h1>Register</h1>
+<mat-form-field>
+  <input matInput [(ngModel)]="user.username" placeholder="Username" />
+</mat-form-field>
+<mat-form-field>
+  <input
+    matInput
+    [(ngModel)]="user.password"
+    type="password"
+    placeholder="Password"
+  />
+</mat-form-field>
+<mat-form-field>
+  <input
+    matInput
+    [(ngModel)]="confirmPass"
+    type="password"
+    placeholder="Confirm Password"
+  />
+</mat-form-field>
+<button mat-button (click)="register()">Submit</button>
+<div>-or-</div>
+<button mat-button (click)="goToLogin()">Go To Login</button>

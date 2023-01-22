@@ -1,0 +1,9 @@
+.loginRegForm {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 80vh;
+  width: 99vw;
+}

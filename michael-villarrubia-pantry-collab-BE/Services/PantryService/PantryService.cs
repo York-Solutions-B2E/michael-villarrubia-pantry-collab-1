@@ -65,7 +65,7 @@ namespace michael_villarrubia_pantry_collab_BE.Services.PantryService
             {
                 return pantry;
             }
-            throw new Exception("Family does not have a pantry");
+            throw new Exception("Family does not have a pantry or does not exist");
         }
     }
 }
