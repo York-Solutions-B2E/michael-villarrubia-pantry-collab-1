@@ -1,4 +1,5 @@
-﻿
+﻿using System.Collections.Immutable;
+
 namespace michael_villarrubia_pantry_collab_BE
 {
     public class DataContext : DbContext
@@ -10,6 +11,7 @@ namespace michael_villarrubia_pantry_collab_BE
         public DbSet<PantryItem> PantryItems { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<Ingredient> Ingredients { get; set;}
+        public DbSet<Invitation> Invitations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,6 +31,33 @@ namespace michael_villarrubia_pantry_collab_BE
                     {
                         j.HasKey(t => new { t.RecipeId, t.IngredientId });
                     });
+            
+/*            modelBuilder.Entity<Recipe>()
+                .HasMany(r => r.RecipeAccess)
+                .WithMany(i => i.Recipes)
+                .UsingEntity<RecipeAccess>(
+                    j => j
+                        .HasOne(ra => ra.Family)
+                        .WithMany(i => i.RecipeAccess)
+                        .HasForeignKey(ri => ri.IngredientId),
+                    j => j
+                        .HasOne(ri => ri.Recipe)
+                        .WithMany(r => r.RecipeIngredients)
+                        .HasForeignKey(ri => ri.RecipeId),
+                    j =>
+                    {
+                        j.HasKey(t => new { t.RecipeId, t.IngredientId });
+                    });
+*/
+            modelBuilder.Entity<Invitation>()
+                .HasOne(i => i.SenderFamily)
+                .WithMany(f => f.SentInvitations)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Invitation>()
+                .HasOne(i => i.ReceiverFamily)
+                .WithMany(f => f.ReceivedInvitations)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

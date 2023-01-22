@@ -111,11 +111,11 @@ namespace michael_villarrubia_pantry_collab_BE.Services.IngredientService
 
             if(family != null)
             {
-                var recipe = family.Recipes.ToList().Find(r => r.Name == itemName);
+                var recipe = family.Recipes.Find(r => r.Name == itemName);
                 
                 if (recipe != null)
                 {
-                    var ingredients = recipe.Ingredients.ToList();
+                    var ingredients = recipe.Ingredients;
                     return ingredients;
                 }
 

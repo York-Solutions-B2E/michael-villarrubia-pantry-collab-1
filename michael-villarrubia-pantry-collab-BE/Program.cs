@@ -5,6 +5,7 @@ using michael_villarrubia_pantry_collab_BE.Services.FamilyService;
 using michael_villarrubia_pantry_collab_BE.Services.PantryService;
 using michael_villarrubia_pantry_collab_BE.Services.IngredientService;
 using michael_villarrubia_pantry_collab_BE.Services.RecipeService;
+using michael_villarrubia_pantry_collab_BE.Services.InvitationService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,7 @@ builder.Services.AddScoped<IFamilyService, FamilyService>();
 builder.Services.AddScoped<IPantryService , PantryService>();
 builder.Services.AddScoped<IRecipeService , RecipeService>();
 builder.Services.AddScoped<IIngredientService , IngredientService>();
+builder.Services.AddScoped<IInvitationService , InvitationService>();
 
 var app = builder.Build();
 

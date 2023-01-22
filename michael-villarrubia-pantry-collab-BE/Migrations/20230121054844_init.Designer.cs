@@ -12,8 +12,8 @@ using michael_villarrubia_pantry_collab_BE;
 namespace michael_villarrubia_pantry_collab_BE.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230120010848_RecipeIngredient")]
-    partial class RecipeIngredient
+    [Migration("20230121054844_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,21 @@ namespace michael_villarrubia_pantry_collab_BE.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("FamilyRecipe", b =>
+                {
+                    b.Property<int>("FamiliesWithAccessId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecipesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FamiliesWithAccessId", "RecipesId");
+
+                    b.HasIndex("RecipesId");
+
+                    b.ToTable("FamilyRecipe");
+                });
 
             modelBuilder.Entity("michael_villarrubia_pantry_collab_BE.Models.Family", b =>
                 {
@@ -68,6 +83,32 @@ namespace michael_villarrubia_pantry_collab_BE.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Ingredients");
+                });
+
+            modelBuilder.Entity("michael_villarrubia_pantry_collab_BE.Models.Invitation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<bool?>("Accepted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ReceiverFamilyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SenderFamilyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverFamilyId");
+
+                    b.HasIndex("SenderFamilyId");
+
+                    b.ToTable("Invitations");
                 });
 
             modelBuilder.Entity("michael_villarrubia_pantry_collab_BE.Models.Pantry", b =>
@@ -132,6 +173,10 @@ namespace michael_villarrubia_pantry_collab_BE.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("Creator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -193,6 +238,40 @@ namespace michael_villarrubia_pantry_collab_BE.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("FamilyRecipe", b =>
+                {
+                    b.HasOne("michael_villarrubia_pantry_collab_BE.Models.Family", null)
+                        .WithMany()
+                        .HasForeignKey("FamiliesWithAccessId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("michael_villarrubia_pantry_collab_BE.Models.Recipe", null)
+                        .WithMany()
+                        .HasForeignKey("RecipesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("michael_villarrubia_pantry_collab_BE.Models.Invitation", b =>
+                {
+                    b.HasOne("michael_villarrubia_pantry_collab_BE.Models.Family", "ReceiverFamily")
+                        .WithMany("ReceivedInvitations")
+                        .HasForeignKey("ReceiverFamilyId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("michael_villarrubia_pantry_collab_BE.Models.Family", "SenderFamily")
+                        .WithMany("SentInvitations")
+                        .HasForeignKey("SenderFamilyId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("ReceiverFamily");
+
+                    b.Navigation("SenderFamily");
+                });
+
             modelBuilder.Entity("michael_villarrubia_pantry_collab_BE.Models.Pantry", b =>
                 {
                     b.HasOne("michael_villarrubia_pantry_collab_BE.Models.Family", "Family")
@@ -245,6 +324,10 @@ namespace michael_villarrubia_pantry_collab_BE.Migrations
                 {
                     b.Navigation("Pantry")
                         .IsRequired();
+
+                    b.Navigation("ReceivedInvitations");
+
+                    b.Navigation("SentInvitations");
 
                     b.Navigation("Users");
                 });

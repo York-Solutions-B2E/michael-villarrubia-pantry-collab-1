@@ -8,11 +8,11 @@ namespace michael_villarrubia_pantry_collab_BE.Models
         public string Name { get; set; } = string.Empty;
         public string Image { get; set; } = string.Empty;
         public string Instructions { get; set; } = string.Empty;
-        public int FamilyId { get; set; }
-        public Family Family { get; set; }
+        public string Creator { get; set; } = string.Empty;
+        public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
         [JsonIgnore]
-        public ICollection<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
         public List<RecipeIngredient> RecipeIngredients { get; set; } = new List<RecipeIngredient>();
-
+        [JsonIgnore]
+        public List<Family> FamiliesWithAccess { get; set; } = new List<Family>();
     }
 }

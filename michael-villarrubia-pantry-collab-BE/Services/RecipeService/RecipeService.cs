@@ -14,28 +14,30 @@ namespace michael_villarrubia_pantry_collab_BE.Services.RecipeService
 
         public async Task<Recipe> CreateRecipe(RecipeDTO recipeRequest, int familyId)
         {
-            var newRecipe = await _context.Recipes
-                .FirstOrDefaultAsync(r => r.Name == recipeRequest.Name && r.FamilyId == familyId);
-
             var family = await _context.Families
+                .Include(f => f.SentInvitations)
+                .ThenInclude(i => i.ReceiverFamily)
+                .Include(f => f.ReceivedInvitations)
+                .ThenInclude(i => i.SenderFamily)
                 .Include(f => f.Recipes)
                 .FirstOrDefaultAsync(f => f.Id == familyId);
-
+            
             if (family == null)
             {
                 throw new Exception("You must join a family first.");
             }
+            
+            var newRecipe = await _context.Recipes
+                .FirstOrDefaultAsync(r => r.Name == recipeRequest.Name && r.Creator == family.Name);
 
             if (newRecipe == null)
             {
                 newRecipe = new Recipe
                 {
                     Name = recipeRequest.Name,
-                    FamilyId = familyId,
+                    Creator = family.Name,
                     Image = recipeRequest.Image,
-                    Family = family,
                 };
-
                 _context.Recipes.Add(newRecipe);
                 await _context.SaveChangesAsync();
             }
@@ -43,8 +45,32 @@ namespace michael_villarrubia_pantry_collab_BE.Services.RecipeService
             {
                 throw new Exception("Your family already has a recipe for " + recipeRequest.Name);
             }
+            //var familiesWithAccess = _context.Families.Where(f => f.SentInvitations.Where(i => i.Accepted == true))
+
+            var familiesToAdd = new List<Family>();
+            family.SentInvitations.Where(i => i.Accepted == true)
+                .ToList()
+                .ForEach(i =>
+                {
+                    familiesToAdd.Add(i.ReceiverFamily);
+                });
+
+            family.ReceivedInvitations.Where(i => i.Accepted == true)
+                .ToList()
+                .ForEach(i =>
+                {
+                    familiesToAdd.Add(i.SenderFamily);
+                });
+
 
             family.Recipes.Add(newRecipe);
+            familiesToAdd.ForEach(f =>
+            {
+                f.Recipes.Add(newRecipe);
+            });
+            newRecipe.FamiliesWithAccess = familiesToAdd;
+            newRecipe.FamiliesWithAccess.Add(family);
+
             await _context.SaveChangesAsync();
 
             return newRecipe;
@@ -54,12 +80,12 @@ namespace michael_villarrubia_pantry_collab_BE.Services.RecipeService
         {
             var family = await _context.Families
                 .Include(f => f.Recipes)
-                .ThenInclude(r => r.RecipeIngredients)
+                .ThenInclude(r => r.Ingredients)
                 .FirstOrDefaultAsync(f => f.Id == familyId);
 
             if (family != null)
             {
-                var recipes = family.Recipes.ToList();
+                var recipes = family.Recipes;
                 return recipes;
             }
 

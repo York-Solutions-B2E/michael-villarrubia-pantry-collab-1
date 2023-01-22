@@ -4,7 +4,7 @@
 
 namespace michael_villarrubia_pantry_collab_BE.Migrations
 {
-    public partial class RecipeIngredient : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -45,11 +45,37 @@ namespace michael_villarrubia_pantry_collab_BE.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Instructions = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Instructions = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Creator = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Recipes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Invitations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SenderFamilyId = table.Column<int>(type: "int", nullable: false),
+                    ReceiverFamilyId = table.Column<int>(type: "int", nullable: false),
+                    Accepted = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Invitations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Invitations_Families_ReceiverFamilyId",
+                        column: x => x.ReceiverFamilyId,
+                        principalTable: "Families",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Invitations_Families_SenderFamilyId",
+                        column: x => x.SenderFamilyId,
+                        principalTable: "Families",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -89,6 +115,30 @@ namespace michael_villarrubia_pantry_collab_BE.Migrations
                         column: x => x.FamilyId,
                         principalTable: "Families",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FamilyRecipe",
+                columns: table => new
+                {
+                    FamiliesWithAccessId = table.Column<int>(type: "int", nullable: false),
+                    RecipesId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FamilyRecipe", x => new { x.FamiliesWithAccessId, x.RecipesId });
+                    table.ForeignKey(
+                        name: "FK_FamilyRecipe_Families_FamiliesWithAccessId",
+                        column: x => x.FamiliesWithAccessId,
+                        principalTable: "Families",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FamilyRecipe_Recipes_RecipesId",
+                        column: x => x.RecipesId,
+                        principalTable: "Recipes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -141,6 +191,21 @@ namespace michael_villarrubia_pantry_collab_BE.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_FamilyRecipe_RecipesId",
+                table: "FamilyRecipe",
+                column: "RecipesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Invitations_ReceiverFamilyId",
+                table: "Invitations",
+                column: "ReceiverFamilyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Invitations_SenderFamilyId",
+                table: "Invitations",
+                column: "SenderFamilyId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Pantries_FamilyId",
                 table: "Pantries",
                 column: "FamilyId",
@@ -164,6 +229,12 @@ namespace michael_villarrubia_pantry_collab_BE.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "FamilyRecipe");
+
+            migrationBuilder.DropTable(
+                name: "Invitations");
+
             migrationBuilder.DropTable(
                 name: "PantryItems");
 
