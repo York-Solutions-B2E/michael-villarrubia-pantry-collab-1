@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { UiService } from 'src/app/Services/ui.service';
+import { showPage } from 'src/app/showPage';
 
 @Component({
   selector: 'app-join-family',
@@ -8,11 +9,14 @@ import { UiService } from 'src/app/Services/ui.service';
 })
 export class JoinFamilyComponent {
   joinCode: string = '';
-  password: string = '';
 
   constructor(private uiService: UiService) {}
 
   joinFamily(): void {
-    this.uiService.joinFamily(this.joinCode, this.password);
+    this.uiService.joinFamily(this.joinCode);
+  }
+
+  goToCreateFamily(): void {
+    this.uiService.$currentPage.next(showPage.createFamily);
   }
 }

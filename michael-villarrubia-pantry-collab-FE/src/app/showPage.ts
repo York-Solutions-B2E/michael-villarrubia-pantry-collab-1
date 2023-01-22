@@ -6,4 +6,5 @@ export enum showPage {
   ingredients = 'ingredients',
   invitations = 'invitations',
   joinFamily = 'joinFamily',
+  createFamily = 'createFamily',
 }

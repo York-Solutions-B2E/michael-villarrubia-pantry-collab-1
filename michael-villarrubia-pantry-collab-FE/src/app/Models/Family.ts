@@ -8,7 +8,7 @@ export class Family {
     public code: string,
     public password: string,
     public recipes: any[],
-    public sentInvitations: any,
+    public sentInvitations: any[],
     public receivedInvitations: any[]
   ) {}
 }

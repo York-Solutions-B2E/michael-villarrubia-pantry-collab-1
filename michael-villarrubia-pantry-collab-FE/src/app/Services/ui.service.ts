@@ -38,6 +38,12 @@ export class UiService {
           this.$currentPage.next(showPage.pantry);
           localStorage.setItem('username', newUser.username);
           localStorage.setItem('password', newUser.password);
+          if (user.familyId) {
+            this.getPantry(user.familyId);
+            this.getFamily(user.familyId);
+          } else {
+            this.$currentPage.next(showPage.joinFamily);
+          }
         },
         error: (err) => {
           this.openSnackBar(err.error);
@@ -95,18 +101,22 @@ export class UiService {
       });
   }
 
-  joinFamily(code: string, password: string) {
+  joinFamily(code: string) {
     this.http
       .patch<Family>(
         `https://localhost:7201/api/Families/join?code=${code}&userId=${this.$userId.value}`,
-        password
+        {}
       )
       .pipe(take(1))
       .subscribe({
         next: (family) => {
           this.$family.next(family);
           this.$familyId.next(family.id);
+          this.getPantry(family.id);
           this.$currentPage.next(showPage.pantry);
+        },
+        error: (err) => {
+          this.openSnackBar(err.error);
         },
       });
   }

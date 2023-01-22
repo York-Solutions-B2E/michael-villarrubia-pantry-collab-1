@@ -14,9 +14,9 @@ namespace michael_villarrubia_pantry_collab_BE.Services.FamilyService
             this.pantryService = pantryService;
         }
         
-        public async Task<Family> CreateFamily(FamilyDTO familyRequest, string userCreatingFamily)
+        public async Task<Family> CreateFamily(FamilyDTO familyRequest, int userId)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Username == userCreatingFamily);
+            var user = await _context.Users.FindAsync(userId);
             
             if(user == null)
             {
@@ -33,18 +33,17 @@ namespace michael_villarrubia_pantry_collab_BE.Services.FamilyService
                 Name = familyRequest.Name,
                 Users = new List<User>(),
                 Code = user.Id.ToString("D7"),
-                Password = familyRequest.Password
             };
 
             _context.Families.Add(family);
             await _context.SaveChangesAsync();
             await pantryService.CreatePantry(family.Id);
-            await JoinFamily(family.Code, family.Password, user.Id);
+            await JoinFamily(family.Code, user.Id);
 
             return family;
         }
 
-        public async Task<Family> JoinFamily(string code, string password, int userId)
+        public async Task<Family> JoinFamily(string code, int userId)
         {
             var user = await _context.Users.FindAsync(userId);
             var family = await _context.Families.Include(x => x.Users).FirstOrDefaultAsync(x => x.Code == code);
@@ -62,11 +61,6 @@ namespace michael_villarrubia_pantry_collab_BE.Services.FamilyService
             if(family == null)
             {
                 throw new Exception("Invalid family code");
-            }
-
-            if(family.Password != password)
-            {
-                throw new Exception("Invalid password");
             }
 
             user.FamilyId = family.Id;

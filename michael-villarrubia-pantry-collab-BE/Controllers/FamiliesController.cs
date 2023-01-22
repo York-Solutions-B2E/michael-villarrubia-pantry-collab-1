@@ -19,11 +19,11 @@ namespace michael_villarrubia_pantry_collab_BE.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<ActionResult<Family>> CreateFamily(FamilyDTO familyRequest, string userCreatingFamily)
+        public async Task<ActionResult<Family>> CreateFamily(FamilyDTO familyRequest, int userId)
         {
             try
             {
-                return Ok(await _familyService.CreateFamily(familyRequest, userCreatingFamily));
+                return Ok(await _familyService.CreateFamily(familyRequest, userId));
             }
             catch (Exception e)
             {
@@ -32,11 +32,11 @@ namespace michael_villarrubia_pantry_collab_BE.Controllers
         }
 
         [HttpPatch("join")]
-        public async Task<ActionResult<Family>> JoinFamily(string code, [FromBody] string password, int userId)
+        public async Task<ActionResult<Family>> JoinFamily(string code, int userId)
         {
             try
             {
-                return Ok(await _familyService.JoinFamily(code, password, userId));
+                return Ok(await _familyService.JoinFamily(code, userId));
             }
             catch (Exception e)
             {

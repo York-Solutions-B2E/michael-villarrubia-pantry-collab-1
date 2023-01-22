@@ -1,7 +1,12 @@
+<h3>
+  Join a family to get started! If you don't know your families code, ask one of
+  your family members for it.
+</h3>
 <mat-form-field>
   <input matInput [(ngModel)]="joinCode" placeholder="Family Code" />
 </mat-form-field>
-<mat-form-field>
-  <input matInput [(ngModel)]="password" placeholder="Password" />
-</mat-form-field>
-<button mat-button (click)="joinFamily()">Join</button>
+<button mat-raised-button (click)="joinFamily()" color="primary">Join</button>
+<div class="message">
+  If you're the first member of your family to sign-up, click
+  <a (click)="goToCreateFamily()">here</a> to create a family.
+</div>

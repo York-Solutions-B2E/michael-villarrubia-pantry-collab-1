@@ -4,5 +4,12 @@
   class="loginRegForm"
 ></app-register>
 <app-login *ngIf="currPage == 'login'" class="loginRegForm"></app-login>
-<app-join-family *ngIf="currPage == 'joinFamily'"></app-join-family>
+<app-join-family
+  *ngIf="currPage == 'joinFamily'"
+  class="loginRegForm"
+></app-join-family>
+<app-create-family
+  *ngIf="currPage == 'createFamily'"
+  class="loginRegForm"
+></app-create-family>
 <app-pantry *ngIf="currPage == 'pantry'"></app-pantry>

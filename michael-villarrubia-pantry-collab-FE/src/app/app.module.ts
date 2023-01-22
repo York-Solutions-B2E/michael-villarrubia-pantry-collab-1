@@ -16,6 +16,7 @@ import { RegisterComponent } from './components/login-register/register/register
 import { PantryComponent } from './components/pantry/pantry.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { JoinFamilyComponent } from './components/join-family/join-family.component';
+import { CreateFamilyComponent } from './components/create-family/create-family.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { JoinFamilyComponent } from './components/join-family/join-family.compon
     PantryComponent,
     NavbarComponent,
     JoinFamilyComponent,
+    CreateFamilyComponent,
   ],
   imports: [
     BrowserModule,
