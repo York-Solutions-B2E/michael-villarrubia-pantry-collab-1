@@ -21,6 +21,10 @@ import { RegisterComponent } from './components/login-register/register/register
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { PantryItemComponent } from './components/pantry-item/pantry-item.component';
 import { PantryComponent } from './components/pantry/pantry.component';
+import { PantryItemAddComponent } from './components/pantry-item-add/pantry-item-add.component';
+import { RecipesComponent } from './components/recipes/recipes.component';
+import { RecipeComponent } from './components/recipe/recipe.component';
+import { RecipeIngredientsComponent } from './components/recipe-ingredients/recipe-ingredients.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +36,10 @@ import { PantryComponent } from './components/pantry/pantry.component';
     JoinFamilyComponent,
     CreateFamilyComponent,
     PantryItemComponent,
+    PantryItemAddComponent,
+    RecipesComponent,
+    RecipeComponent,
+    RecipeIngredientsComponent,
   ],
   imports: [
     BrowserModule,

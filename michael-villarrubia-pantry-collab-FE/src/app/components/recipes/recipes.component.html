@@ -5,15 +5,13 @@
   matBadgePosition="before"
   matBadge="+"
   matBadgeColor="accent"
-  (click)="addItem()"
 >
-  Add Item
+  Add Recipe
 </button>
 <div class="parent">
-  <app-pantry-item
-    [pantryItem]="item"
-    [familyId]="pantry.familyId"
-    *ngFor="let item of pantry.items"
+  <app-recipe
+    [recipe]="recipe"
+    *ngFor="let recipe of recipes"
     class="item"
-  ></app-pantry-item>
+  ></app-recipe>
 </div>

@@ -1,0 +1,17 @@
+<h2>New Pantry Item</h2>
+<mat-form-field>
+  <input matInput [(ngModel)]="item.name" placeholder="Item Name" />
+</mat-form-field>
+<mat-form-field>
+  <input matInput [(ngModel)]="item.quantityInPantry" placeholder="Quantity" />
+</mat-form-field>
+<mat-form-field>
+  <input matInput [(ngModel)]="item.calories" placeholder="Total Calories" />
+</mat-form-field>
+<mat-form-field>
+  <input matInput [(ngModel)]="item.weight" placeholder="Total Weight" />
+</mat-form-field>
+<mat-form-field>
+  <input matInput [(ngModel)]="item.image" placeholder="Image URL" />
+</mat-form-field>
+<button mat-raised-button color="accent" (click)="addItem()">Add Item</button>

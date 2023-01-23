@@ -1,0 +1,19 @@
+<mat-card class="recipe">
+  <mat-card-header class="recipeName">
+    <mat-card-title>
+      <b>{{ recipe.name }}</b>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <img src="{{ recipe.image }}" class="itemImage" />
+    <div class="label">Ingredients:</div>
+    <div class="recipeDetails">
+      <app-recipe-ingredients
+        *ngFor="let ingredient of recipe.ingredients"
+        [ingredient]="ingredient"
+        [recipeId]="recipe.id"
+      ></app-recipe-ingredients>
+    </div>
+    <div class="label">Instructions: {{ recipe.instructions }}</div>
+  </mat-card-content>
+</mat-card>

@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card class="item">
   <mat-card-header class="itemName">
     <mat-card-title>
       <b>{{ pantryItem.name }}</b>
@@ -13,18 +13,22 @@
       Total Calories: {{ pantryItem.calories }} cal(s)
     </div>
     <div class="itemDetails">Total Weight: {{ pantryItem.weight }} gram(s)</div>
-    <div class="itemQuantities" *ngIf="pantryItem.quantityInPantry > 1">
-      Per Item Details:
+    <div *ngIf="pantryItem.quantityInPantry > 1">
+      <div class="itemQuantities">Per Item Details:</div>
+      <div class="itemDetails">
+        Calories:
+        {{ pantryItem.calories / pantryItem.quantityInPantry }}
+        cal(s)
+      </div>
+      <div class="itemDetails">
+        Weight:
+        {{ pantryItem.weight / pantryItem.quantityInPantry }}
+        gram(s)
+      </div>
     </div>
-    <div class="itemDetails">
-      Calories:
-      {{ pantryItem.calories / pantryItem.quantityInPantry }}
-      cal(s)
-    </div>
-    <div class="itemDetails">
-      Weight:
-      {{ pantryItem.weight / pantryItem.quantityInPantry }}
-      gram(s)
+    <div class="itemQuantities" *ngIf="ingredients">Ingredients:</div>
+    <div class="itemDetails" *ngFor="let ingredient of ingredients">
+      {{ ingredient.name }}
     </div>
   </mat-card-content>
 </mat-card>

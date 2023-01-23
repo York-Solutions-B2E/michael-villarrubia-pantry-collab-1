@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable, ReplaySubject, take } from 'rxjs';
 import { Family } from '../Models/Family';
 import { Pantry } from '../Models/Pantry';
 import { PantryItem } from '../Models/PantryItem';
+import { Recipe } from '../Models/Recipe';
 import { User } from '../Models/User';
 import { showPage } from '../showPage';
 
@@ -20,6 +21,7 @@ export class UiService {
 
   $pantry = new BehaviorSubject<Pantry>(new Pantry(0, [], 0));
   $family = new BehaviorSubject<Family>(new Family(0, '', '', [], [], []));
+  $recipes = new BehaviorSubject<Recipe[]>([]);
 
   constructor(private http: HttpClient, public _snackbar: MatSnackBar) {}
 
@@ -67,6 +69,7 @@ export class UiService {
           if (user.familyId) {
             this.getPantry(user.familyId);
             this.getFamily(user.familyId);
+            this.getRecipes(user.familyId);
           } else {
             this.$currentPage.next(showPage.joinFamily);
           }
@@ -84,6 +87,7 @@ export class UiService {
       .subscribe({
         next: (pantry) => {
           this.$pantry.next(pantry);
+          this.getRecipes(familyId);
         },
         error: (err) => {
           this.openSnackBar(err.error);
@@ -119,7 +123,7 @@ export class UiService {
       });
   }
 
-  joinFamily(code: string) {
+  joinFamily(code: string): void {
     this.http
       .patch<Family>(
         `https://localhost:7201/api/Families/join?code=${code}&userId=${this.$userId.value}`,
@@ -139,7 +143,7 @@ export class UiService {
       });
   }
 
-  createFamily(name: string) {
+  createFamily(name: string): void {
     this.http
       .post<Family>(
         `https://localhost:7201/api/Families/create?userId=${this.$userId.value}`,
@@ -152,6 +156,42 @@ export class UiService {
           this.$familyId.next(family.id);
           this.getPantry(family.id);
           this.$currentPage.next(showPage.pantry);
+        },
+        error: (err) => {
+          this.openSnackBar(err.error);
+        },
+      });
+  }
+
+  getRecipes(familyId: number): void {
+    this.http
+      .get<Recipe[]>(
+        `https://localhost:7201/api/Recipes/getRecipes?familyId=${familyId}`
+      )
+      .pipe(take(1))
+      .subscribe({
+        next: (recipes) => {
+          this.$recipes.next(recipes);
+        },
+        error: (err) => {
+          this.openSnackBar(err.error);
+        },
+      });
+  }
+
+  addRecipe(recipe: Recipe): void {
+    this.http
+      .post<Recipe>(
+        `https://localhost:7201/api/Recipes/add?familyId=${this.$familyId.value}`,
+        recipe
+      )
+      .pipe(take(1))
+      .subscribe({
+        next: (recipe) => {
+          if (this.$familyId.value != null) {
+            this.getRecipes(this.$familyId.value);
+          }
+          this.$currentPage.next(showPage.recipes);
         },
         error: (err) => {
           this.openSnackBar(err.error);

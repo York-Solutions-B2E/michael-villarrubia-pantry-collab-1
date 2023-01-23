@@ -1,15 +1,17 @@
 <app-navbar [currPage]="currPage"></app-navbar>
-<app-register
-  *ngIf="currPage == 'register'"
-  class="loginRegForm"
-></app-register>
-<app-login *ngIf="currPage == 'login'" class="loginRegForm"></app-login>
+<app-register *ngIf="currPage == 'register'" class="forms"></app-register>
+<app-login *ngIf="currPage == 'login'" class="forms"></app-login>
 <app-join-family
   *ngIf="currPage == 'joinFamily'"
-  class="loginRegForm"
+  class="forms"
 ></app-join-family>
 <app-create-family
   *ngIf="currPage == 'createFamily'"
-  class="loginRegForm"
+  class="forms"
 ></app-create-family>
 <app-pantry *ngIf="currPage == 'pantry'"></app-pantry>
+<app-pantry-item-add
+  *ngIf="currPage == 'pantryItemAdd'"
+  class="forms"
+></app-pantry-item-add>
+<app-recipes *ngIf="currPage == 'recipes'"></app-recipes>
