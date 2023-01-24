@@ -7,10 +7,8 @@ namespace michael_villarrubia_pantry_collab_BE.Models
     {
         public int Id { get; set; }
         public int SenderFamilyId { get; set; }
-        [JsonIgnore]
         public Family SenderFamily { get; set; }
         public int ReceiverFamilyId { get; set; }
-        [JsonIgnore]
         public Family ReceiverFamily { get; set; }
         public bool? Accepted { get; set; } = null;
 

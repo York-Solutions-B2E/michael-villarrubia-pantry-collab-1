@@ -4,6 +4,8 @@
 }
 
 .recipeDetails {
+  display: flex;
+  flex-flow: row wrap;
   margin-left: 10px;
   margin-bottom: 5px;
   color: black;

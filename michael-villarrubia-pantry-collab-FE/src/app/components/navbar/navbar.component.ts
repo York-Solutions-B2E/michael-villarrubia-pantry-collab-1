@@ -54,4 +54,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.uiService.$currentPage.next(showPage.recipes);
     this.uiService.getRecipes(this.familyId);
   }
+
+  goToInvitations(): void {
+    this.uiService.$currentPage.next(showPage.invitations);
+    this.uiService.getInvitations(this.familyId);
+  }
 }

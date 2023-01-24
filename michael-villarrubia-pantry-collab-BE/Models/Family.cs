@@ -12,7 +12,9 @@ namespace michael_villarrubia_pantry_collab_BE.Models
         public Pantry Pantry { get; set; } = new Pantry();
         [JsonIgnore]
         public List<Recipe> Recipes { get; set; } = new List<Recipe>();
+        [JsonIgnore]
         public List<Invitation> SentInvitations { get; set; } = new List<Invitation>();
+        [JsonIgnore]
         public List<Invitation> ReceivedInvitations { get; set; } = new List<Invitation>();
     }
 }

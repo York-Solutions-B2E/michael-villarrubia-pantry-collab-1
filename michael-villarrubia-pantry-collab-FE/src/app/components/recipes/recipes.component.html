@@ -5,13 +5,18 @@
   matBadgePosition="before"
   matBadge="+"
   matBadgeColor="accent"
+  (click)="addRecipe()"
 >
   Add Recipe
 </button>
 <div class="parent">
-  <app-recipe
-    [recipe]="recipe"
-    *ngFor="let recipe of recipes"
-    class="item"
-  ></app-recipe>
+  <app-recipe [recipe]="recipes[index]" class="item"></app-recipe>
+</div>
+<div class="arrows">
+  <button mat-button (click)="previousRecipe()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <button mat-button (click)="nextRecipe()">
+    <mat-icon>arrow_forward</mat-icon>
+  </button>
 </div>

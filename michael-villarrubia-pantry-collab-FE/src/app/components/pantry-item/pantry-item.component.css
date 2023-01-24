@@ -34,3 +34,13 @@ b {
   width: 400px;
   margin: 10px;
 }
+
+.ingredients {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.ingredient {
+  margin-left: 10px;
+  font-size: 14px;
+}

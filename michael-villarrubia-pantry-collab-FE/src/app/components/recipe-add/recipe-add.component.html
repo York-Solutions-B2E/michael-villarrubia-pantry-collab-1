@@ -1,0 +1,51 @@
+<h2 *ngIf="!recipe.name">New Recipe</h2>
+<h2 *ngIf="recipe.name">Recipe: {{ recipe.name }}</h2>
+<div *ngIf="step === 1" class="flex">
+  <mat-form-field>
+    <input matInput [(ngModel)]="recipe.name" placeholder="Recipe Name" />
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [(ngModel)]="recipe.image" placeholder="Image URL" />
+  </mat-form-field>
+</div>
+<div *ngIf="step === 2" class="flex">
+  <app-recipe-ingredient-add
+    [recipeId]="recipe.id"
+    [ingredients]="recipe.ingredients"
+  ></app-recipe-ingredient-add>
+</div>
+<div *ngIf="step === 3" class="flex">
+  <mat-form-field class="instructionSize">
+    <textarea
+      matInput
+      [(ngModel)]="recipe.instructions"
+      placeholder="Instructions"
+    ></textarea>
+  </mat-form-field>
+</div>
+<button
+  mat-raised-button
+  color="accent"
+  class="spacing buttonWidth"
+  *ngIf="step === 3"
+>
+  Create Recipe
+</button>
+<button
+  mat-raised-button
+  color="accent"
+  (click)="nextAction()"
+  *ngIf="step !== 3"
+  class="spacing"
+>
+  Next
+</button>
+<button
+  mat-raised-button
+  color="warn"
+  (click)="step = step - 1"
+  *ngIf="step !== 1"
+  class="spacing"
+>
+  Back
+</button>

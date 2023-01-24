@@ -1,0 +1,12 @@
+.spacing {
+  margin-bottom: 10px;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.instructionSize {
+  width: 400px;
+}

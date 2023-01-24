@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Observable, ReplaySubject, take } from 'rxjs';
 import { Family } from '../Models/Family';
+import { Ingredient } from '../Models/Ingredient';
+import { Invitation } from '../Models/Invitation';
 import { Pantry } from '../Models/Pantry';
 import { PantryItem } from '../Models/PantryItem';
 import { Recipe } from '../Models/Recipe';
@@ -22,6 +24,10 @@ export class UiService {
   $pantry = new BehaviorSubject<Pantry>(new Pantry(0, [], 0));
   $family = new BehaviorSubject<Family>(new Family(0, '', '', [], [], []));
   $recipes = new BehaviorSubject<Recipe[]>([]);
+  $createdRecipe = new BehaviorSubject<Recipe>(
+    new Recipe(0, '', '', '', '', [])
+  );
+  $invitations = new BehaviorSubject<Invitation[]>([]);
 
   constructor(private http: HttpClient, public _snackbar: MatSnackBar) {}
 
@@ -35,7 +41,7 @@ export class UiService {
       .pipe(take(1))
       .subscribe({
         next: (newUser) => {
-          this.$userId.next(user.id);
+          this.$userId.next(newUser.id);
           this.$username.next(newUser.username);
           this.$familyId.next(newUser.familyId);
           this.$currentPage.next(showPage.pantry);
@@ -44,6 +50,7 @@ export class UiService {
           if (user.familyId) {
             this.getPantry(user.familyId);
             this.getFamily(user.familyId);
+            this.getRecipes(user.familyId);
           } else {
             this.$currentPage.next(showPage.joinFamily);
           }
@@ -188,13 +195,73 @@ export class UiService {
       .pipe(take(1))
       .subscribe({
         next: (recipe) => {
-          if (this.$familyId.value != null) {
+          if (this.$familyId.value) {
             this.getRecipes(this.$familyId.value);
           }
-          this.$currentPage.next(showPage.recipes);
+          this.$createdRecipe.next(recipe);
         },
         error: (err) => {
           this.openSnackBar(err.error);
+        },
+      });
+  }
+
+  addIngredient(quantity: number, ingredient: Ingredient, recipeId: number) {
+    this.http
+      .post<Ingredient>(
+        `https://localhost:7201/api/Ingredients/add?quantity=${quantity}&recipeId=${recipeId}`,
+        ingredient
+      )
+      .pipe(take(1))
+      .subscribe({
+        next: (ingredient) => {
+          let updatedRecipe = this.$createdRecipe.value;
+          updatedRecipe.ingredients.push(ingredient);
+          this.$createdRecipe.next(updatedRecipe);
+        },
+        error: (err) => {
+          this.openSnackBar(err.error);
+        },
+      });
+  }
+
+  sendInvite(senderFamId: number, receiverCode: string) {
+    this.http
+      .post<Invitation>(
+        `https://localhost:7201/api/Invitations/send?senderFamId=${senderFamId}&receiverFamCode=${receiverCode}`,
+        {}
+      )
+      .pipe(take(1))
+      .subscribe({
+        next: (invitation) => {
+          this.getInvitations(invitation.senderFamilyId);
+        },
+      });
+  }
+
+  respondToInvite(invitationId: number, response: boolean) {
+    this.http
+      .post<Invitation>(
+        `https://localhost:7201/api/Invitations/respond?invitationId=${invitationId}&response=${response}`,
+        {}
+      )
+      .pipe(take(1))
+      .subscribe({
+        next: (invitation) => {
+          this.getInvitations(invitation.receiverFamilyId);
+        },
+      });
+  }
+
+  getInvitations(familyId: number) {
+    this.http
+      .get<Invitation[]>(
+        `https://localhost:7201/api/Invitations?familyId=${familyId}`
+      )
+      .pipe(take(1))
+      .subscribe({
+        next: (invitations) => {
+          this.$invitations.next(invitations);
         },
       });
   }

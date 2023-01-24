@@ -42,5 +42,11 @@ namespace michael_villarrubia_pantry_collab_BE.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult<List<Invitation>>> GetInvitations(int familyId)
+        {
+            return Ok(await invitationService.GetInvitations(familyId));
+        }
     }
 }

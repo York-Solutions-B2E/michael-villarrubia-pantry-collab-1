@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Recipe } from 'src/app/Models/Recipe';
 import { UiService } from 'src/app/Services/ui.service';
+import { showPage } from 'src/app/showPage';
 
 @Component({
   selector: 'app-recipes',
@@ -11,6 +12,7 @@ import { UiService } from 'src/app/Services/ui.service';
 export class RecipesComponent implements OnInit, OnDestroy {
   recipes: Recipe[] = [];
   $recipesSub = new Subscription();
+  index: number = 0;
 
   constructor(private uiService: UiService) {}
 
@@ -22,5 +24,17 @@ export class RecipesComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.$recipesSub.unsubscribe();
+  }
+
+  addRecipe(): void {
+    this.uiService.$currentPage.next(showPage.recipeAdd);
+  }
+
+  nextRecipe(): void {
+    if (this.index < this.recipes.length - 1) this.index++;
+  }
+
+  previousRecipe(): void {
+    if (this.index > 0) this.index--;
   }
 }

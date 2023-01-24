@@ -4,6 +4,7 @@ export enum showPage {
   pantry = 'pantry',
   pantryItemAdd = 'pantryItemAdd',
   recipes = 'recipes',
+  recipeAdd = 'recipeAdd',
   ingredients = 'ingredients',
   invitations = 'invitations',
   joinFamily = 'joinFamily',

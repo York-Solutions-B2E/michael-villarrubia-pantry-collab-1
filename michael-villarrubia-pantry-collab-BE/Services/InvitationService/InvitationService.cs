@@ -1,4 +1,6 @@
-﻿namespace michael_villarrubia_pantry_collab_BE.Services.InvitationService
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace michael_villarrubia_pantry_collab_BE.Services.InvitationService
 {
     public class InvitationService : IInvitationService
     {
@@ -86,6 +88,21 @@
 
             await _context.SaveChangesAsync();
             return invitation;
+        }
+
+        public async Task<List<Invitation>> GetInvitations(int familyId)
+        {
+            var invitations = await _context.Invitations.
+                Where(i => i.SenderFamilyId == familyId || i.ReceiverFamilyId == familyId)
+                .Include(i => i.SenderFamily)
+                .Include(i => i.ReceiverFamily)
+                .ToListAsync();
+            if (invitations == null)
+            {
+                return new List<Invitation>();
+            }
+
+            return invitations; 
         }
     }
 }

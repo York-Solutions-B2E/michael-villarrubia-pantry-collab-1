@@ -25,6 +25,10 @@ import { PantryItemAddComponent } from './components/pantry-item-add/pantry-item
 import { RecipesComponent } from './components/recipes/recipes.component';
 import { RecipeComponent } from './components/recipe/recipe.component';
 import { RecipeIngredientsComponent } from './components/recipe-ingredients/recipe-ingredients.component';
+import { RecipeAddComponent } from './components/recipe-add/recipe-add.component';
+import { RecipeIngredientAddComponent } from './components/recipe-ingredient-add/recipe-ingredient-add.component';
+import { InvitationsComponent } from './components/invitations/invitations.component';
+import { InvitationComponent } from './components/invitation/invitation.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +44,10 @@ import { RecipeIngredientsComponent } from './components/recipe-ingredients/reci
     RecipesComponent,
     RecipeComponent,
     RecipeIngredientsComponent,
+    RecipeAddComponent,
+    RecipeIngredientAddComponent,
+    InvitationsComponent,
+    InvitationComponent,
   ],
   imports: [
     BrowserModule,

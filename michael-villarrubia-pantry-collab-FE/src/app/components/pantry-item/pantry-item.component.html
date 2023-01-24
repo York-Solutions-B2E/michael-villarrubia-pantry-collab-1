@@ -13,22 +13,11 @@
       Total Calories: {{ pantryItem.calories }} cal(s)
     </div>
     <div class="itemDetails">Total Weight: {{ pantryItem.weight }} gram(s)</div>
-    <div *ngIf="pantryItem.quantityInPantry > 1">
-      <div class="itemQuantities">Per Item Details:</div>
-      <div class="itemDetails">
-        Calories:
-        {{ pantryItem.calories / pantryItem.quantityInPantry }}
-        cal(s)
-      </div>
-      <div class="itemDetails">
-        Weight:
-        {{ pantryItem.weight / pantryItem.quantityInPantry }}
-        gram(s)
-      </div>
-    </div>
     <div class="itemQuantities" *ngIf="ingredients">Ingredients:</div>
-    <div class="itemDetails" *ngFor="let ingredient of ingredients">
-      {{ ingredient.name }}
+    <div class="ingredients">
+      <div class="ingredient" *ngFor="let ingredient of ingredients">
+        {{ ingredient.name }}
+      </div>
     </div>
   </mat-card-content>
 </mat-card>

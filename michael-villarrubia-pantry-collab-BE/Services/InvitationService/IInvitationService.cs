@@ -4,5 +4,6 @@
     {
         Task<Invitation> SendInvitation(int senderFamilyId, string recieverFamilyCode);
         Task<Invitation> RespondToInvitation(int invitationId, bool reponse);
+        Task<List<Invitation>> GetInvitations(int familyId);
     }
 }

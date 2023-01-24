@@ -1,0 +1,28 @@
+<div *ngIf="ingredients.length > 0" class="label">
+  Ingredients:
+  <app-recipe-ingredients
+    class="ingredients"
+    *ngFor="let ingredient of ingredients"
+    [recipeId]="recipeId"
+    [ingredient]="ingredient"
+  ></app-recipe-ingredients>
+</div>
+<mat-form-field class="spacing">
+  <mat-label>Ingredient</mat-label>
+  <input matInput [(ngModel)]="ingredient.name" placeholder="Ingredient" />
+</mat-form-field>
+<mat-form-field class="qty">
+  <mat-label>qty</mat-label>
+  <input matInput [(ngModel)]="quantity" />
+</mat-form-field>
+<mat-form-field class="unit">
+  <mat-label>Unit</mat-label>
+  <input
+    matInput
+    [(ngModel)]="ingredient.unitOfMeasurement"
+    placeholder="Unit"
+  />
+</mat-form-field>
+<button mat-button (click)="addIngredient()" class="spacing">
+  <mat-icon>add</mat-icon>Add Ingredient
+</button>

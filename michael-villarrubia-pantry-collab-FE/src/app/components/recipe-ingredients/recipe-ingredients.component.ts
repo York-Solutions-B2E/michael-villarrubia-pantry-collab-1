@@ -13,7 +13,6 @@ export class RecipeIngredientsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getQuantity();
-    console.log(this.ingredient);
   }
 
   getQuantity(): void {
