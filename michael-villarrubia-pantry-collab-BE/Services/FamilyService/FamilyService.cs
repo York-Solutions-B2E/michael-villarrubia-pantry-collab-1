@@ -95,5 +95,32 @@ namespace michael_villarrubia_pantry_collab_BE.Services.FamilyService
             }
             return family;
         }
+
+        public async Task<List<string>> GetFamiliesIngredients(int familyId)
+        {
+            var family = await _context.Families
+                .Where(f => f.Id == familyId)
+                .Include(f => f.Recipes)
+                .ThenInclude(r => r.Ingredients)
+                .FirstOrDefaultAsync();
+            
+            if(family == null)
+            {
+                throw new Exception("family not found");
+            }
+            
+            var ingredients = new HashSet<string>();
+
+            family.Recipes.ForEach(r =>
+            {
+                r.Ingredients.ForEach(i =>
+                {
+                    ingredients.Add(i.Name);
+                });
+            });
+
+            return ingredients.ToList();
+
+        }
     }
 }

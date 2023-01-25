@@ -25,6 +25,7 @@ export class UiService {
   $pantry = new BehaviorSubject<Pantry>(new Pantry(0, [], 0));
   $family = new BehaviorSubject<Family>(new Family(0, '', '', [], [], []));
   $recipes = new BehaviorSubject<Recipe[]>([]);
+  $ingredients = new BehaviorSubject<string[]>([]);
   $createdRecipe = new BehaviorSubject<Recipe>(
     new Recipe(0, '', '', '', '', [])
   );
@@ -333,6 +334,22 @@ export class UiService {
           },
         });
     }
+  }
+
+  getIngredients(familyId: number) {
+    this.http
+      .get<string[]>(
+        `https://localhost:7201/api/Families/ingredients?familyId=${familyId}`
+      )
+      .pipe(take(1))
+      .subscribe({
+        next: (ingredients) => {
+          this.$ingredients.next(ingredients);
+        },
+        error: (err) => {
+          this.openSnackBar(err.error);
+        },
+      });
   }
 
   logout(): void {

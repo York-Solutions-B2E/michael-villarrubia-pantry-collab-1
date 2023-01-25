@@ -70,5 +70,18 @@ namespace michael_villarrubia_pantry_collab_BE.Controllers
                 return NotFound(e.Message);
             }
         }
+
+        [HttpGet("ingredients")]
+        public async Task<ActionResult<List<string>>> GetFamiliesIngredients(int familyId)
+        {
+            try
+            {
+                return Ok(await _familyService.GetFamiliesIngredients(familyId));
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
+        }
     }
 }
