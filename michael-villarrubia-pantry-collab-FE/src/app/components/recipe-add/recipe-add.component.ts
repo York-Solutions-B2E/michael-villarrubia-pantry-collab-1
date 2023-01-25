@@ -3,6 +3,7 @@ import { Subscriber, Subscription } from 'rxjs';
 import { Ingredient } from 'src/app/Models/Ingredient';
 import { Recipe } from 'src/app/Models/Recipe';
 import { UiService } from 'src/app/Services/ui.service';
+import { showPage } from 'src/app/showPage';
 
 @Component({
   selector: 'app-recipe-add',
@@ -25,13 +26,11 @@ export class RecipeAddComponent implements OnDestroy {
   removeIngredient(): void {}
 
   nextAction(): void {
-    if (this.step === 1 && this.recipe.id == 0) {
+    if (this.step === 3) {
       this.uiService.addRecipe(this.recipe);
-      this.$createdRecipeSub = this.uiService.$createdRecipe.subscribe(
-        (newRecipe) => {
-          this.recipe = newRecipe;
-        }
-      );
+      this.uiService.getIngredients(this.uiService.$family.value.id);
+      this.uiService.$currentPage.next(showPage.recipes);
+      return;
     }
     this.step++;
   }

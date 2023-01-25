@@ -19,9 +19,9 @@ namespace michael_villarrubia_pantry_collab_BE.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<ActionResult<Ingredient>> AddIngredient(
+        public async Task<ActionResult<List<Ingredient>>> AddIngredient(
             int quantity,
-            IngredientDTO ingredientRequest,
+            List<IngredientDTO> ingredientRequest,
             int recipeId)
         {
             try

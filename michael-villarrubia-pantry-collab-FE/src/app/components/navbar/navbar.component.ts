@@ -12,8 +12,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
   @Input() currPage: string = '';
   familyName: string = '';
   familyId: number = 0;
+  userId: number = 0;
 
   $familySub = new Subscription();
+  $userIdSub = new Subscription();
 
   constructor(public uiService: UiService) {}
 
@@ -25,6 +27,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
         .toUpperCase()
         .concat(family.name.slice(1, family.name.length));
     });
+
+    this.$userIdSub = this.uiService.$userId.subscribe(
+      (userId) => (this.userId = userId)
+    );
   }
 
   ngOnDestroy(): void {
@@ -37,12 +43,23 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   showBackButton(): boolean {
     if (
-      this.currPage.toLowerCase().includes('add') ||
-      this.currPage.toLowerCase().includes('update')
+      this.currPage === 'login' ||
+      this.currPage === 'register' ||
+      this.currPage === 'pantry' ||
+      this.currPage === 'joinFamily' ||
+      this.currPage === 'createFamily'
     ) {
-      return true;
+      return false;
     }
-    return false;
+    return true;
+  }
+
+  hasFamily(): boolean {
+    return this.familyId ? true : false;
+  }
+
+  isLoggedIn(): boolean {
+    return this.userId != 0 ? true : false;
   }
 
   backToPantry(): void {
@@ -52,6 +69,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   goToRecipes(): void {
     this.uiService.$currentPage.next(showPage.recipes);
+    this.uiService.getIngredients(this.familyId);
     this.uiService.getRecipes(this.familyId);
   }
 

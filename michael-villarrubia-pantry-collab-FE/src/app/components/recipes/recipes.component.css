@@ -8,7 +8,22 @@
   justify-content: space-around;
 }
 
-.arrows {
+.itemWidth {
+  width: 150px;
+}
+
+.rows {
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.label {
+  text-decoration: underline;
+  font-weight: bold;
+  margin-left: 15px;
+}
+
+.buttonTopMargin {
+  margin-top: 5px;
 }

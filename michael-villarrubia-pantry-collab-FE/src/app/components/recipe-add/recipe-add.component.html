@@ -10,8 +10,9 @@
 </div>
 <div *ngIf="step === 2" class="flex">
   <app-recipe-ingredient-add
-    [recipeId]="recipe.id"
+    [recipe]="recipe"
     [ingredients]="recipe.ingredients"
+    (recipeEvent)="recipe = $event"
   ></app-recipe-ingredient-add>
 </div>
 <div *ngIf="step === 3" class="flex">
@@ -28,6 +29,7 @@
   color="accent"
   class="spacing buttonWidth"
   *ngIf="step === 3"
+  (click)="nextAction()"
 >
   Create Recipe
 </button>

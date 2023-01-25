@@ -4,5 +4,7 @@
     { 
         public string Name { get; set; } = string.Empty;
         public string Image { get; set; } = string.Empty;
+        public string Instructions { get; set; } = string.Empty;
+        public List<IngredientDTO> Ingredients { get; set; } = new List<IngredientDTO>();
     }
 }

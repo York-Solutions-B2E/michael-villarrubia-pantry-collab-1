@@ -1,4 +1,5 @@
 ﻿using michael_villarrubia_pantry_collab_BE.DTOs;
+using michael_villarrubia_pantry_collab_BE.Services.IngredientService;
 using Microsoft.EntityFrameworkCore;
 
 namespace michael_villarrubia_pantry_collab_BE.Services.RecipeService
@@ -6,10 +7,12 @@ namespace michael_villarrubia_pantry_collab_BE.Services.RecipeService
     public class RecipeService : IRecipeService
     {
         private readonly DataContext _context;
+        private readonly IIngredientService ingredientService;
 
-        public RecipeService(DataContext context)
+        public RecipeService(DataContext context, IIngredientService ingredientService)
         {
             _context = context;
+            this.ingredientService = ingredientService;
         }
 
         public async Task<Recipe> CreateRecipe(RecipeDTO recipeRequest, int familyId)
@@ -37,6 +40,7 @@ namespace michael_villarrubia_pantry_collab_BE.Services.RecipeService
                     Name = recipeRequest.Name,
                     Creator = family.Name,
                     Image = recipeRequest.Image,
+                    Instructions = recipeRequest.Instructions,
                 };
                 _context.Recipes.Add(newRecipe);
                 await _context.SaveChangesAsync();
@@ -45,7 +49,8 @@ namespace michael_villarrubia_pantry_collab_BE.Services.RecipeService
             {
                 throw new Exception("Your family already has a recipe for " + recipeRequest.Name);
             }
-            //var familiesWithAccess = _context.Families.Where(f => f.SentInvitations.Where(i => i.Accepted == true))
+
+            await ingredientService.AddIngredient(1, recipeRequest.Ingredients, newRecipe.Id);
 
             var familiesToAdd = new List<Family>();
             family.SentInvitations.Where(i => i.Accepted == true)

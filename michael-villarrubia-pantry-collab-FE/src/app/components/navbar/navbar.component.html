@@ -4,16 +4,20 @@
   <button mat-button *ngIf="currPage == 'pantry'">
     <mat-icon>shopping_basket</mat-icon> The {{ familyName }}'s Pantry
   </button>
-  <button mat-button *ngIf="currPage != 'pantry'" (click)="backToPantry()">
+  <button mat-button *ngIf="showBackButton()" (click)="backToPantry()">
     <mat-icon>arrow_back</mat-icon>Back to Pantry
   </button>
   <span class="spacer"></span>
   <span class="spacer"></span>
-  <button mat-button (click)="goToInvitations()">Invitations</button>
-  <div>|</div>
-  <button mat-button (click)="goToRecipes()">Family Recipes</button>
-  <div>|</div>
-  <button mat-button (click)="logout()">
+  <button mat-button *ngIf="hasFamily()" (click)="goToInvitations()">
+    Invitations
+  </button>
+  <div *ngIf="hasFamily()">|</div>
+  <button mat-button *ngIf="hasFamily()" (click)="goToRecipes()">
+    Family Recipes
+  </button>
+  <div *ngIf="hasFamily()">|</div>
+  <button mat-button *ngIf="isLoggedIn()" (click)="logout()">
     Logout <mat-icon>exit_to_app</mat-icon>
   </button>
 </mat-toolbar>

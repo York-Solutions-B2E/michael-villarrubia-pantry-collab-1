@@ -204,6 +204,7 @@ export class UiService {
         next: (recipe) => {
           if (this.$familyId.value) {
             this.getRecipes(this.$familyId.value);
+            this.getIngredients(this.$familyId.value);
           }
           this.$createdRecipe.next(recipe);
         },
@@ -354,7 +355,11 @@ export class UiService {
 
   logout(): void {
     this.$familyId.next(null);
+    this.$ingredients.next([]);
+    this.$invitations.next([]);
+    this.$recipes.next([]);
     this.$username.next('');
+    this.$userId.next(0);
     localStorage.clear();
     this.$currentPage.next(showPage.login);
   }

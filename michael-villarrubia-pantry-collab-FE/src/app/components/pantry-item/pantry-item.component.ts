@@ -33,6 +33,4 @@ export class PantryItemComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.$recipesSub.unsubscribe();
   }
-
-  getIngredients(): void {}
 }

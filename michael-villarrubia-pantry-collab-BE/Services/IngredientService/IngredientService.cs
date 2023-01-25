@@ -1,5 +1,6 @@
 ﻿using michael_villarrubia_pantry_collab_BE.DTOs;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using System.Reflection.Metadata.Ecma335;
 
 namespace michael_villarrubia_pantry_collab_BE.Services.IngredientService
 {
@@ -12,14 +13,14 @@ namespace michael_villarrubia_pantry_collab_BE.Services.IngredientService
             _context = context;
         }
 
-        public async Task<Ingredient> AddIngredient(int quantity, IngredientDTO ingredientRequest, int recipeId)
+        public async Task<List<Ingredient>> AddIngredient(int quantity, List<IngredientDTO> ingredientRequest, int recipeId)
         {
-            var ingredient = await _context.Ingredients
+            var ingredients = await _context.Ingredients
                 .Include(i => i.Recipes)
                 .AsSplitQuery()
                 .Include(i => i.RecipeIngredients)
                 .AsSplitQuery()
-                .FirstOrDefaultAsync(i => i.Name == ingredientRequest.Name);
+                .ToListAsync();
             
             var recipe = await _context.Recipes
                 .Include(r => r.Ingredients)
@@ -33,33 +34,52 @@ namespace michael_villarrubia_pantry_collab_BE.Services.IngredientService
                 throw new Exception("You must create a recipe to add ingredients to it!");
             }
             
-            if (ingredient == null)
+            if (ingredientRequest.Count > 0)
             {
-                ingredient = new Ingredient
+                foreach(var i in ingredientRequest)  
                 {
-                    Name = ingredientRequest.Name,
-                    UnitOfMeasurement = ingredientRequest.UnitOfMeasurement,
+                    var existIngredient = ingredients.FirstOrDefault(existing => existing.Name == i.Name);
+                    if (existIngredient != null)
+                    {
+                        var _recipeIngredient = new RecipeIngredient
+                        {
+                            Ingredient = existIngredient,
+                            Recipe = recipe,
+                            Quantity = i.recipeIngredients[0].Quantity,
+                        };
+
+                        recipe.RecipeIngredients.Add(_recipeIngredient);
+                        existIngredient.RecipeIngredients.Add(_recipeIngredient);
+
+                        recipe.Ingredients.Add(existIngredient);
+                        existIngredient.Recipes.Add(recipe);
+                        continue;
+                    }
+                    var newIngredient = new Ingredient
+                    {
+                        Name = i.Name,
+                        UnitOfMeasurement = i.UnitOfMeasurement,
+                    };
+
+                    _context.Ingredients.Add(newIngredient);
+
+                    var recipeIngredient = new RecipeIngredient
+                    {
+                        Ingredient = newIngredient,
+                        Recipe = recipe,
+                        Quantity = i.recipeIngredients[0].Quantity,
+                    };
+
+                    recipe.RecipeIngredients.Add(recipeIngredient);
+                    newIngredient.RecipeIngredients.Add(recipeIngredient);
+
+                    recipe.Ingredients.Add(newIngredient);
+                    newIngredient.Recipes.Add(recipe);
                 };
-                
-                _context.Ingredients.Add(ingredient);
             }
-
-            var recipeIngredient = new RecipeIngredient
-            {
-                Ingredient = ingredient,
-                Recipe = recipe,
-                Quantity = quantity,
-            };
-
-            recipe.RecipeIngredients.Add(recipeIngredient);
-            ingredient.RecipeIngredients.Add(recipeIngredient);
-
-            recipe.Ingredients.Add(ingredient);
-            ingredient.Recipes.Add(recipe);
-
             await _context.SaveChangesAsync();
 
-            return ingredient;
+            return ingredients;
         }
 
         public async Task<Ingredient> ChangeQuantityAsync(int ingredientId, int recipeId, int quantity)

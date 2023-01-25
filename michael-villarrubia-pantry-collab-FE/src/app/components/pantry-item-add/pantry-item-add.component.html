@@ -3,13 +3,16 @@
   <input matInput [(ngModel)]="item.name" placeholder="Item Name" />
 </mat-form-field>
 <mat-form-field>
-  <input matInput [(ngModel)]="item.quantityInPantry" placeholder="Quantity" />
+  <mat-label>Quantity</mat-label>
+  <input matInput [(ngModel)]="item.quantityInPantry" />
 </mat-form-field>
 <mat-form-field>
-  <input matInput [(ngModel)]="item.calories" placeholder="Total Calories" />
+  <mat-label>Total Calories</mat-label>
+  <input matInput [(ngModel)]="item.calories" />
 </mat-form-field>
 <mat-form-field>
-  <input matInput [(ngModel)]="item.weight" placeholder="Total Weight" />
+  <mat-label>Total Weight</mat-label>
+  <input matInput [(ngModel)]="item.weight" />
 </mat-form-field>
 <mat-form-field>
   <input matInput [(ngModel)]="item.image" placeholder="Image URL" />
