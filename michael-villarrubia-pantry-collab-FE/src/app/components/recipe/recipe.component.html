@@ -1,7 +1,7 @@
 <mat-card class="recipe">
   <mat-card-header class="recipeName">
     <mat-card-title>
-      <b>{{ recipe.name }}</b>
+      <b>Your Recipe: {{ recipe.name }}</b>
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
@@ -15,5 +15,41 @@
       ></app-recipe-ingredients>
     </div>
     <div class="label">Instructions: {{ recipe.instructions }}</div>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="recipe">
+  <mat-card-header class="recipeName">
+    <mat-card-title>
+      <b *ngIf="redditPost.title === '@@@@loading'; else header">Loading...</b>
+      <ng-template #header>
+        <b *ngIf="redditPost.found; else random"
+          >Reddit Recipe: {{ recipe.name }}</b
+        >
+        <ng-template #random
+          ><b
+            >Reddit doesn't have a recipe for {{ recipe.name }}, here's a random
+            one instead!</b
+          ></ng-template
+        >
+      </ng-template>
+    </mat-card-title>
+    <mat-card-subtitle *ngIf="redditPost.title !== '@@@@loading'">{{
+      redditPost.title
+    }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <img
+      *ngIf="redditPost.title !== '@@@@loading'"
+      src="{{ redditPost.thumbnail }}"
+      class="itemImage"
+    />
+    <div class="recipeDetails"></div>
+    <a
+      class="link"
+      href="https://www.reddit.com/{{ redditPost.link }}"
+      *ngIf="redditPost.title !== '@@@@loading'"
+      >link to reddit post</a
+    >
   </mat-card-content>
 </mat-card>

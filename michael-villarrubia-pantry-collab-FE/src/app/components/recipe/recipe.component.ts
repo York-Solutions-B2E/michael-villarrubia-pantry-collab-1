@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Recipe } from 'src/app/Models/Recipe';
-import { UiService } from 'src/app/Services/ui.service';
+import { RedditPost } from 'src/app/Models/redditPost';
 
 @Component({
   selector: 'app-recipe',
@@ -8,7 +8,8 @@ import { UiService } from 'src/app/Services/ui.service';
   styleUrls: ['./recipe.component.css'],
 })
 export class RecipeComponent {
-  @Input() recipe: Recipe = new Recipe(0, '', '', '', '', []);
+  @Input() recipe = new Recipe(0, '', '', '', '', []);
+  @Input() redditPost = new RedditPost('', '', '', true);
 
-  constructor(private uiService: UiService) {}
+  constructor() {}
 }

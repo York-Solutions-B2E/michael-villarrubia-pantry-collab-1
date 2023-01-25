@@ -10,7 +10,11 @@
   Add Recipe
 </button>
 <div class="parent">
-  <app-recipe [recipe]="recipes[index]" class="item"></app-recipe>
+  <app-recipe
+    [recipe]="recipes[index]"
+    [redditPost]="redditPost"
+    class="item"
+  ></app-recipe>
 </div>
 <div class="arrows">
   <button mat-button (click)="previousRecipe()">

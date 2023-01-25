@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Recipe } from 'src/app/Models/Recipe';
+import { RedditPost } from 'src/app/Models/redditPost';
 import { UiService } from 'src/app/Services/ui.service';
 import { showPage } from 'src/app/showPage';
 
@@ -11,14 +12,20 @@ import { showPage } from 'src/app/showPage';
 })
 export class RecipesComponent implements OnInit, OnDestroy {
   recipes: Recipe[] = [];
-  $recipesSub = new Subscription();
   index: number = 0;
+  redditPost = new RedditPost('', '', '', true);
+
+  $recipesSub = new Subscription();
+  $redditPostSub = new Subscription();
 
   constructor(private uiService: UiService) {}
 
   ngOnInit(): void {
     this.$recipesSub = this.uiService.$recipes.subscribe(
       (recipes) => (this.recipes = recipes)
+    );
+    this.$redditPostSub = this.uiService.$redditPost.subscribe(
+      (redditPost) => (this.redditPost = redditPost)
     );
   }
 
@@ -32,9 +39,11 @@ export class RecipesComponent implements OnInit, OnDestroy {
 
   nextRecipe(): void {
     if (this.index < this.recipes.length - 1) this.index++;
+    this.uiService.getRedditTopSearch(this.recipes[this.index].name);
   }
 
   previousRecipe(): void {
     if (this.index > 0) this.index--;
+    this.uiService.getRedditTopSearch(this.recipes[this.index].name);
   }
 }

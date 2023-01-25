@@ -1,13 +1,14 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { BehaviorSubject, Observable, ReplaySubject, take } from 'rxjs';
+import { BehaviorSubject, map, Observable, ReplaySubject, take } from 'rxjs';
 import { Family } from '../Models/Family';
 import { Ingredient } from '../Models/Ingredient';
 import { Invitation } from '../Models/Invitation';
 import { Pantry } from '../Models/Pantry';
 import { PantryItem } from '../Models/PantryItem';
 import { Recipe } from '../Models/Recipe';
+import { RedditPost } from '../Models/redditPost';
 import { User } from '../Models/User';
 import { showPage } from '../showPage';
 
@@ -28,6 +29,10 @@ export class UiService {
     new Recipe(0, '', '', '', '', [])
   );
   $invitations = new BehaviorSubject<Invitation[]>([]);
+
+  $redditPost = new BehaviorSubject<RedditPost>(
+    new RedditPost('', '', '', true)
+  );
 
   constructor(private http: HttpClient, public _snackbar: MatSnackBar) {}
 
@@ -179,6 +184,7 @@ export class UiService {
       .subscribe({
         next: (recipes) => {
           this.$recipes.next(recipes);
+          this.getRedditTopSearch(recipes[0].name);
         },
         error: (err) => {
           this.openSnackBar(err.error);
@@ -264,6 +270,69 @@ export class UiService {
           this.$invitations.next(invitations);
         },
       });
+  }
+
+  getRedditTopSearch(recipeName: string) {
+    let redditPost = new RedditPost('@@@@loading', '', '', true);
+    this.$redditPost.next(redditPost);
+    this.http
+      .get<any>(
+        `https://www.reddit.com/r/recipes/search.json?q=${recipeName}&restrict_sr=on`
+      )
+      .pipe(take(1))
+      .subscribe({
+        next: (searchResponse) => {
+          if (searchResponse.data.children[0]) {
+            redditPost.link = searchResponse.data.children[0].data.permalink;
+            redditPost.title = searchResponse.data.children[0].data.title;
+            redditPost.thumbnail =
+              searchResponse.data.children[0].data.thumbnail;
+            redditPost.found = true;
+            this.$redditPost.next(redditPost);
+          } else {
+            redditPost.found = false;
+            this.getRandomRedditRecipe(redditPost);
+          }
+        },
+        error: () => {
+          this.openSnackBar('error connecting to reddit');
+        },
+      });
+  }
+
+  getRandomRedditRecipe(redditPost: RedditPost) {
+    this.http
+      .get<any>(
+        `https://www.reddit.com/r/recipes/random.json?q=${
+          Math.random() * 400
+        }&restrict_sr=on`,
+        { observe: 'response' }
+      )
+      .pipe(take(1))
+      .pipe(map((response) => this.getRedirectData(response.url, redditPost)))
+      .pipe(take(1))
+      .subscribe();
+  }
+
+  getRedirectData(redirectUrl: string | null, redditPost: RedditPost): void {
+    console.log(redirectUrl);
+    if (redirectUrl) {
+      this.http
+        .get<any>(redirectUrl)
+        .pipe(take(1))
+        .subscribe({
+          next: (randomRecipeResponse) => {
+            console.log(randomRecipeResponse);
+            redditPost.link =
+              randomRecipeResponse[0].data.children[0].data.permalink;
+            redditPost.title =
+              randomRecipeResponse[0].data.children[0].data.title;
+            redditPost.thumbnail =
+              randomRecipeResponse[0].data.children[0].data.thumbnail;
+            this.$redditPost.next(redditPost);
+          },
+        });
+    }
   }
 
   logout(): void {

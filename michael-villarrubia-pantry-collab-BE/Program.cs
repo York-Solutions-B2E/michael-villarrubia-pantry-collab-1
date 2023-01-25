@@ -29,6 +29,7 @@ builder.Services.AddDbContext<michael_villarrubia_pantry_collab_BE.DataContext>(
     options.UseSqlServer("Server=localhost;Initial Catalog=PantryBE;Integrated Security=False;User Id=sa;Password=Your_password123;MultipleActiveResultSets=True");
 });
 
+
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IFamilyService, FamilyService>();
 builder.Services.AddScoped<IPantryService , PantryService>();
@@ -43,6 +44,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<michael_villarrubia_pantry_collab_BE.DataContext>();
+    context.Database.Migrate();
 }
 
 app.UseHttpsRedirection();
