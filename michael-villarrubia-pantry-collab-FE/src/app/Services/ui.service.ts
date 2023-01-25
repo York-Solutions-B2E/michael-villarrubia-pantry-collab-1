@@ -1,4 +1,4 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, map, Observable, ReplaySubject, take } from 'rxjs';
@@ -243,6 +243,10 @@ export class UiService {
       .subscribe({
         next: (invitation) => {
           this.getInvitations(invitation.senderFamilyId);
+          this.openSnackBar('Invitation sent');
+        },
+        error: (err) => {
+          this.openSnackBar(err.error);
         },
       });
   }
@@ -257,6 +261,10 @@ export class UiService {
       .subscribe({
         next: (invitation) => {
           this.getInvitations(invitation.receiverFamilyId);
+          if (response)
+            this.openSnackBar(
+              "Invitation Accepted, the sender can now view your recipes, and you can view their's."
+            );
         },
       });
   }

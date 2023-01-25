@@ -27,3 +27,8 @@
 .buttonTopMargin {
   margin-top: 5px;
 }
+
+.noRecipeText {
+  font-weight: bold;
+  margin-left: 15px;
+}

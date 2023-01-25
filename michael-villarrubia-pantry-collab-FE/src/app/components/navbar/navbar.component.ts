@@ -12,6 +12,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   @Input() currPage: string = '';
   familyName: string = '';
   familyId: number = 0;
+  familyCode: string = '';
   userId: number = 0;
 
   $familySub = new Subscription();
@@ -22,6 +23,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.$familySub = this.uiService.$family.subscribe((family) => {
       this.familyId = family.id;
+      this.familyCode = family.code;
       this.familyName = family.name
         .charAt(0)
         .toUpperCase()

@@ -1,0 +1,11 @@
+.margins {
+  margin-left: 20px;
+  margin-top: 15px;
+}
+
+.parent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}

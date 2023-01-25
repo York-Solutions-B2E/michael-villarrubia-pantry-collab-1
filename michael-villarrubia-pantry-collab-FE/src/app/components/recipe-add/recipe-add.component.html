@@ -20,34 +20,36 @@
     <textarea
       matInput
       [(ngModel)]="recipe.instructions"
-      placeholder="Instructions"
+      placeholder="Directions"
     ></textarea>
   </mat-form-field>
 </div>
 <button
-  mat-raised-button
-  color="accent"
+  mat-flat-button
+  color="primary"
   class="spacing buttonWidth"
   *ngIf="step === 3"
   (click)="nextAction()"
 >
   Create Recipe
 </button>
-<button
-  mat-raised-button
-  color="accent"
-  (click)="nextAction()"
-  *ngIf="step !== 3"
-  class="spacing"
->
-  Next
-</button>
-<button
-  mat-raised-button
-  color="warn"
-  (click)="step = step - 1"
-  *ngIf="step !== 1"
-  class="spacing"
->
-  Back
-</button>
+<div>
+  <button
+    mat-flat-button
+    color="accent"
+    (click)="step = step - 1"
+    *ngIf="step !== 1"
+    class="spacing"
+  >
+    Back
+  </button>
+  <button
+    mat-flat-button
+    color="accent"
+    (click)="nextAction()"
+    *ngIf="step !== 3"
+    class="spacing"
+  >
+    Next
+  </button>
+</div>

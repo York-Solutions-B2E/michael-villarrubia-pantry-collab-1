@@ -31,6 +31,31 @@ namespace michael_villarrubia_pantry_collab_BE.Services.InvitationService
                 throw new Exception("Receiving family not found");
             }
 
+            if(sender == receiver)
+            {
+                throw new Exception("You can't send and invite to yourself...");
+            }
+
+            var invites = await _context.Invitations
+                .Where(i => 
+                    i.ReceiverFamilyId == receiver.Id && i.SenderFamilyId == sender.Id || 
+                    i.ReceiverFamilyId == sender.Id && i.SenderFamilyId == receiver.Id)
+                .ToListAsync();
+
+            var pending = invites.FirstOrDefault(i => i.Accepted == null);
+
+            if(pending != null) 
+            {
+                throw new Exception("Your family already has a pending invite for the " + receiver.Name);
+            }
+
+            var alreadyFriends = invites.FirstOrDefault(i => i.Accepted == true);
+
+            if (alreadyFriends != null)
+            {
+                throw new Exception("You are already friends with the" + receiver.Name);
+            }
+
             var invitation = new Invitation
             {
                 SenderFamily = sender,

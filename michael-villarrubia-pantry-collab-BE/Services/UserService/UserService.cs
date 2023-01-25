@@ -29,6 +29,15 @@ namespace michael_villarrubia_pantry_collab_BE.Services.UserService
 
         public async Task<User> Register(UserDTO userRequest)
         {
+            if(userRequest.Username.Length < 4 )
+            {
+                throw new Exception("Username must be at least 4 characters");
+            }
+            if(userRequest.Password.Length < 4)
+            {
+                throw new Exception("Password must be at least 4 characters");
+            }
+
             var userExists = await _context.Users.FirstOrDefaultAsync(x => x.Username == userRequest.Username);
             if(userExists == null)
             {

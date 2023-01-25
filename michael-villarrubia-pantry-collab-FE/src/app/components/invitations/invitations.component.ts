@@ -12,14 +12,19 @@ export class InvitationsComponent implements OnInit {
   receiverCode: string = '';
   familyId: number = 0;
   invitations: Invitation[] = [];
-
+  incomingInvites: Invitation[] = [];
   $invitationsSub = new Subscription();
 
   constructor(public uiService: UiService) {}
 
   ngOnInit(): void {
     this.$invitationsSub = this.uiService.$invitations.subscribe(
-      (invitations) => (this.invitations = invitations)
+      (invitations) => {
+        this.invitations = invitations;
+        this.incomingInvites = invitations.filter(
+          (i) => i.receiverFamilyId === this.familyId && i.accepted === null
+        );
+      }
     );
     if (this.uiService.$familyId.value)
       this.familyId = this.uiService.$familyId.value;

@@ -1,8 +1,9 @@
 <mat-card class="recipe">
   <mat-card-header class="recipeName">
     <mat-card-title>
-      <b>Your Recipe: {{ recipe.name }}</b>
+      <b>Recipe: {{ recipe.name }}</b>
     </mat-card-title>
+    <mat-card-subtitle>Creator: The {{ recipe.creator }}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     <img src="{{ recipe.image }}" class="itemImage" alt="" />
@@ -14,7 +15,15 @@
         [recipeId]="recipe.id"
       ></app-recipe-ingredients>
     </div>
-    <div class="label">Instructions: {{ recipe.instructions }}</div>
+    <div
+      class="label"
+      *ngIf="recipe.instructions.length > 0; else noInstructions"
+    >
+      Directions: {{ recipe.instructions }}
+    </div>
+    <ng-template #noInstructions
+      ><div>Recipe has no directions</div></ng-template
+    >
   </mat-card-content>
 </mat-card>
 

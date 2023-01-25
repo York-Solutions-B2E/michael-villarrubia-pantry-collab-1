@@ -1,11 +1,20 @@
-<div>Receipient Family Code:</div>
-<mat-form-field>
+<div class="margins">Receipient Family Code:</div>
+<mat-form-field class="margins">
   <input matInput [(ngModel)]="receiverCode" placeholder="Family Code" />
 </mat-form-field>
-<button mat-raised-button (click)="sendInvite()" color="primary">Send</button>
-
-<app-invitation
-  *ngFor="let invitation of invitations"
-  [invitation]="invitation"
-  [familyId]="familyId"
-></app-invitation>
+<button
+  mat-raised-button
+  (click)="sendInvite()"
+  color="primary"
+  class="margins"
+>
+  Send
+</button>
+<h3 *ngIf="incomingInvites.length === 0" class="margins">No Invitations</h3>
+<div class="parent">
+  <app-invitation
+    *ngFor="let invitation of invitations"
+    [invitation]="invitation"
+    [familyId]="familyId"
+  ></app-invitation>
+</div>

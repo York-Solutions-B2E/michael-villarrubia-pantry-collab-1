@@ -1,9 +1,11 @@
 <mat-toolbar color="primary">
   <div *ngIf="currPage == 'login' || currPage == 'register'">Pantry Collab</div>
-
-  <button mat-button *ngIf="currPage == 'pantry'">
-    <mat-icon>shopping_basket</mat-icon> The {{ familyName }}'s Pantry
-  </button>
+  <div *ngIf="currPage == 'pantry'">
+    <button mat-button>
+      <mat-icon>shopping_basket</mat-icon> The {{ familyName }}'s Pantry &nbsp;|
+    </button>
+    &nbsp; Family Code: {{ familyCode }}
+  </div>
   <button mat-button *ngIf="showBackButton()" (click)="backToPantry()">
     <mat-icon>arrow_back</mat-icon>Back to Pantry
   </button>

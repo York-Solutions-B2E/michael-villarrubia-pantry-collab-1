@@ -3,7 +3,7 @@
   *ngIf="invitation.senderFamilyId !== familyId && invitation.accepted === null"
 >
   <mat-card-header>
-    From: {{ invitation.senderFamily?.name }} family
+    From: {{ invitation.senderFamily?.name }} Family
   </mat-card-header>
   <mat-card-actions>
     <button mat-button (click)="respond(true)">Accept</button>

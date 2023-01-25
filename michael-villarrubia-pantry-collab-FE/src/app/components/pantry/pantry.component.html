@@ -9,6 +9,9 @@
 >
   Add Item
 </button>
+<div *ngIf="pantry.items.length === 0" class="noItemText">
+  Add an item to see something here!
+</div>
 <div class="parent">
   <app-pantry-item
     [pantryItem]="item"

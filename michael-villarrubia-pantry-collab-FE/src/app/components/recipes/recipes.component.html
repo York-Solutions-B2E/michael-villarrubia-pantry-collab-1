@@ -9,47 +9,55 @@
 >
   Add Recipe
 </button>
-<div class="rows">
-  <div class="list-items">
-    <mat-chip-listbox
-      multiple="true"
-      class="mat-mdc-chip-set-stacked itemWidth"
-    >
-      <mat-label class="label">Ingredients</mat-label>
-      <mat-chip-option
-        *ngFor="let ingredient of ingredients"
-        (selectionChange)="isSelected(ingredient)"
-        >{{ ingredient }}</mat-chip-option
+<div *ngIf="recipes.length > 0; else noRecipes">
+  <div class="rows">
+    <div class="list-items">
+      <mat-chip-listbox
+        multiple="true"
+        class="mat-mdc-chip-set-stacked itemWidth"
       >
-    </mat-chip-listbox>
-    <a
-      mat-raised-button
-      color="accent"
-      class="buttonTopMargin"
-      *ngIf="ingredientsSelected.length !== 0"
-      href="{{ getSearchString() }}"
-      target="_blank"
-      rel="noopener noreferrer"
-      >Search Reddit</a
-    >
-  </div>
-  <div class="parent">
-    <app-recipe
-      [recipe]="recipeSelected"
-      [redditPost]="redditPost"
-      class="item"
-    ></app-recipe>
-  </div>
-  <div class="list-items">
-    <mat-chip-listbox class="mat-mdc-chip-set-stacked itemWidth">
-      <mat-label class="label">Recipes</mat-label>
-      <mat-chip-option
-        *ngFor="let recipe of recipes"
-        (selectionChange)="selectRecipe(recipe)"
-        [selected]="isRecipeSelected(recipe)"
+        <mat-label class="label">Ingredients</mat-label>
+        <mat-chip-option
+          *ngFor="let ingredient of ingredients"
+          (selectionChange)="isSelected(ingredient)"
+          >{{ ingredient }}</mat-chip-option
+        >
+      </mat-chip-listbox>
+      <a
+        mat-raised-button
         color="accent"
-        >{{ recipe.name }}</mat-chip-option
+        class="buttonTopMargin"
+        *ngIf="ingredientsSelected.length !== 0"
+        href="{{ getSearchString() }}"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Search Reddit</a
       >
-    </mat-chip-listbox>
+    </div>
+    <div class="parent">
+      <app-recipe
+        [recipe]="recipeSelected"
+        [redditPost]="redditPost"
+        class="item"
+      ></app-recipe>
+    </div>
+    <div class="list-items">
+      <mat-chip-listbox class="mat-mdc-chip-set-stacked itemWidth">
+        <mat-label class="label">Recipes</mat-label>
+        <mat-chip-option
+          *ngFor="let recipe of recipes"
+          (selectionChange)="selectRecipe(recipe)"
+          [selected]="isRecipeSelected(recipe)"
+          color="accent"
+          >{{ recipe.name }}</mat-chip-option
+        >
+      </mat-chip-listbox>
+    </div>
   </div>
 </div>
+
+<ng-template #noRecipes
+  ><h3 class="noRecipeText">
+    Add a recipe to see something here!
+  </h3></ng-template
+>

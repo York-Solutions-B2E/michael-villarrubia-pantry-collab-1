@@ -32,6 +32,15 @@ export class RecipeAddComponent implements OnDestroy {
       this.uiService.$currentPage.next(showPage.recipes);
       return;
     }
+    if (this.recipe.name.length < 2 && this.step == 1) {
+      this.uiService.openSnackBar('Recipe name must be at least 2 characters');
+      return;
+    }
+    if (this.recipe.ingredients.length == 0 && this.step == 2) {
+      this.uiService.openSnackBar('Recipe must have at least one ingredient');
+      return;
+    }
+
     this.step++;
   }
 }
