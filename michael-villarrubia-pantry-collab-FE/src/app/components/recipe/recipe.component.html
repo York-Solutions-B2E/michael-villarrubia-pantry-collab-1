@@ -1,10 +1,18 @@
-<mat-card class="recipe">
-  <mat-card-header class="recipeName">
-    <mat-card-title>
-      <b>Recipe: {{ recipe.name }}</b>
-    </mat-card-title>
-    <mat-card-subtitle>Creator: The {{ recipe.creator }}</mat-card-subtitle>
-  </mat-card-header>
+<mat-card class="recipe" *ngIf="edit === false">
+  <div class="cardTop">
+    <button mat-button class="actionButtons" (click)="deleteRecipe()">
+      <mat-icon>clear</mat-icon>
+    </button>
+    <button mat-button class="actionButtons" (click)="editRecipe()">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <mat-card-header class="recipeName">
+      <mat-card-title>
+        <b>Recipe: {{ recipe.name }}</b>
+      </mat-card-title>
+      <mat-card-subtitle>Creator: The {{ recipe.creator }}</mat-card-subtitle>
+    </mat-card-header>
+  </div>
   <mat-card-content>
     <img src="{{ recipe.image }}" class="itemImage" alt="" />
     <div class="label">Ingredients:</div>
@@ -27,26 +35,35 @@
   </mat-card-content>
 </mat-card>
 
+<app-recipe-edit *ngIf="edit === true" [recipe]="recipe"></app-recipe-edit>
+
 <mat-card class="recipe">
-  <mat-card-header class="recipeName">
-    <mat-card-title>
-      <b *ngIf="redditPost.title === '@@@@loading'; else header">Loading...</b>
-      <ng-template #header>
-        <b *ngIf="redditPost.found; else random"
-          >Reddit Recipe: {{ recipe.name }}</b
+  <div class="cardTop">
+    <button mat-button class="actionButtons">
+      <mat-icon>clear</mat-icon>
+    </button>
+    <mat-card-header class="recipeName">
+      <mat-card-title>
+        <b *ngIf="redditPost.title === '@@@@loading'; else header"
+          >Loading...</b
         >
-        <ng-template #random
-          ><b
-            >Reddit doesn't have a recipe for {{ recipe.name }}, here's a random
-            one instead!</b
-          ></ng-template
-        >
-      </ng-template>
-    </mat-card-title>
-    <mat-card-subtitle *ngIf="redditPost.title !== '@@@@loading'">{{
-      redditPost.title
-    }}</mat-card-subtitle>
-  </mat-card-header>
+        <ng-template #header>
+          <b *ngIf="redditPost.found; else random"
+            >Reddit Recipe: {{ recipe.name }}</b
+          >
+          <ng-template #random
+            ><b
+              >Reddit doesn't have a recipe for {{ recipe.name }}, here's a
+              random one instead!</b
+            ></ng-template
+          >
+        </ng-template>
+      </mat-card-title>
+      <mat-card-subtitle *ngIf="redditPost.title !== '@@@@loading'">{{
+        redditPost.title
+      }}</mat-card-subtitle>
+    </mat-card-header>
+  </div>
   <mat-card-content>
     <img
       *ngIf="redditPost.title !== '@@@@loading'"

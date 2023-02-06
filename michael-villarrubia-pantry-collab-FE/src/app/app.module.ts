@@ -30,6 +30,8 @@ import { RecipeIngredientAddComponent } from './components/recipe-ingredient-add
 import { RecipeIngredientsComponent } from './components/recipe-ingredients/recipe-ingredients.component';
 import { RecipeComponent } from './components/recipe/recipe.component';
 import { RecipesComponent } from './components/recipes/recipes.component';
+import { RecipeEditComponent } from './components/recipe-edit/recipe-edit.component';
+import { RecipeIngredientEditComponent } from './components/recipe-ingredient-edit/recipe-ingredient-edit.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +51,8 @@ import { RecipesComponent } from './components/recipes/recipes.component';
     RecipeIngredientAddComponent,
     InvitationsComponent,
     InvitationComponent,
+    RecipeEditComponent,
+    RecipeIngredientEditComponent,
   ],
   imports: [
     BrowserModule,

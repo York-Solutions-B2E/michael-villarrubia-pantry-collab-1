@@ -361,6 +361,36 @@ export class UiService {
       });
   }
 
+  deleteRecipe(recipeId: number) {
+    this.http
+      .delete<Recipe[]>(
+        `https://localhost:7201/api/Recipes?familyId=${this.$familyId.value}&recipeId=${recipeId}`
+      )
+      .pipe(take(1))
+      .subscribe({
+        next: (recipes) => {
+          this.$recipes.next(recipes);
+        },
+        error: (err) => {
+          this.openSnackBar(err.error);
+        },
+      });
+  }
+
+  editRecipe(recipeId: number, editedReciped: Recipe) {
+    this.http
+      .put<Recipe[]>(
+        `https://localhost:7201/api/Recipes?recipeId=${recipeId}&familyId=${this.$familyId.value}`,
+        editedReciped
+      )
+      .pipe(take(1))
+      .subscribe({
+        next: (recipes) => {
+          this.$recipes.next(recipes);
+        },
+      });
+  }
+
   logout(): void {
     this.$familyId.next(null);
     this.$ingredients.next([]);

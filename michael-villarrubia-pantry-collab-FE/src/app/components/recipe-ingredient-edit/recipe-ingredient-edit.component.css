@@ -1,18 +1,4 @@
 .spacing {
-  margin-left: 10px;
-  margin-bottom: 10px;
-}
-
-.flex {
-  display: flex;
-  flex-direction: column;
-}
-
-.instructionSize {
-  width: 400px;
-}
-
-.spacing {
   margin-left: 5px;
   margin-right: 5px;
   margin-top: 2px;
@@ -21,12 +7,17 @@
 
 .qty {
   width: 75px;
-  margin-left: 5px;
+  margin-left: 10px;
   margin-right: 5px;
 }
 
 .unit {
   width: 75px;
   margin-left: 5px;
+  margin-right: 5px;
+}
+
+.name {
+  width: 150px;
   margin-right: 5px;
 }

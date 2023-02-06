@@ -36,3 +36,8 @@ b {
   width: 700px;
   margin: 10px;
 }
+
+.actionButtons {
+  float: right;
+  padding-right: 0px;
+}
