@@ -42,11 +42,18 @@ namespace michael_villarrubia_pantry_collab_BE.Services.IngredientService
                     var existIngredient = ingredients.FirstOrDefault(existing => existing.Name == i.Name);
                     if (existIngredient != null)
                     {
+                        var index = i.recipeIngredients.FindIndex(ri => ri.IngredientId == existIngredient.Id && ri.RecipeId == recipe.Id);
+
+                        if(index == -1)
+                        {
+                            index = 0;
+                        }
+
                         var _recipeIngredient = new RecipeIngredient
                         {
                             Ingredient = existIngredient,
                             Recipe = recipe,
-                            Quantity = i.recipeIngredients[0].Quantity,
+                            Quantity = i.recipeIngredients[index].Quantity,
                         };
 
                         recipe.RecipeIngredients.Add(_recipeIngredient);
