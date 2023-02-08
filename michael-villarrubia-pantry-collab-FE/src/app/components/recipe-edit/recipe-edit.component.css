@@ -1,0 +1,30 @@
+.rowContent {
+  width: 400px;
+}
+
+.ingredientRow {
+  width: 500px;
+  margin-left: 100px;
+}
+
+.recipe {
+  width: 700px;
+  margin: 10px;
+}
+
+.spacing {
+  margin: 10px;
+  width: 100px;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.title {
+  margin-top: 10px;
+  text-decoration: underline;
+  font-weight: bold;
+}

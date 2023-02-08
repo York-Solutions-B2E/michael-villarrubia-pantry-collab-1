@@ -35,4 +35,22 @@ b {
   height: 400px;
   width: 700px;
   margin: 10px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.actionButtons {
+  float: right;
+  padding-right: 0px;
+}
+
+.marginTop {
+  margin-top: 5px;
+}
+
+.title {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-size: 18px;
 }

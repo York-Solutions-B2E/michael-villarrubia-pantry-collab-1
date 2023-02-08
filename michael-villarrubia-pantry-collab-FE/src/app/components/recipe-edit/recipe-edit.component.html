@@ -1,0 +1,33 @@
+<mat-card class="recipe">
+  <mat-card-title class="title center">Edit Recipe</mat-card-title>
+  <mat-card-header class="center">
+    <mat-form-field class="rowContent">
+      <mat-label>Recipe Name</mat-label>
+      <input matInput [(ngModel)]="recipe.name" />
+    </mat-form-field>
+  </mat-card-header>
+  <mat-card-content class="center">
+    <mat-form-field class="rowContent">
+      <mat-label>Directions</mat-label>
+      <textarea matInput [(ngModel)]="recipe.instructions"> </textarea>
+    </mat-form-field>
+    <app-recipe-ingredient-edit
+      *ngFor="let ingredient of recipe.ingredients; index as i"
+      [ingredient]="ingredient"
+      [index]="i"
+      [recipeId]="recipe.id"
+      (removeIngredientEvent)="removeIngredient($event)"
+      class="ingredientRow"
+    >
+    </app-recipe-ingredient-edit>
+    <button mat-stroked-button (click)="addIngredient()" color="primary">
+      <mat-icon>add</mat-icon>Add Ingredient
+    </button>
+  </mat-card-content>
+  <mat-card-actions class="center">
+    <div>
+      <button mat-raised-button class="spacing" color="primary">Save</button>
+      <button mat-raised-button class="spacing" color="warn">Cancel</button>
+    </div>
+  </mat-card-actions>
+</mat-card>

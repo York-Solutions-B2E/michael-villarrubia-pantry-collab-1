@@ -14,7 +14,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
   recipes: Recipe[] = [];
   ingredients: string[] = [];
   index: number = 0;
-  redditPost = new RedditPost('', '', '', true);
+  redditPost = new RedditPost('', '', '', '', '', 0, true);
   ingredientsSelected: string[] = [];
   recipeSelected = new Recipe(0, '', '', '', '', []);
 
