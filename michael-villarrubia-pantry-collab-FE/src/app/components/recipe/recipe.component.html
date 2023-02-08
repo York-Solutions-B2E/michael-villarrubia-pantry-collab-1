@@ -59,9 +59,16 @@
           >
         </ng-template>
       </mat-card-title>
-      <mat-card-subtitle *ngIf="redditPost.title !== '@@@@loading'">{{
-        redditPost.title
-      }}</mat-card-subtitle>
+      <mat-card-subtitle *ngIf="redditPost.title !== '@@@@loading'">
+        <a
+          class="link"
+          href="https://www.reddit.com/{{ redditPost.link }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          *ngIf="redditPost.title !== '@@@@loading'"
+          >{{ redditPost.title }}</a
+        >
+      </mat-card-subtitle>
     </mat-card-header>
   </div>
   <mat-card-content>
@@ -72,13 +79,9 @@
       alt=""
     />
     <div class="recipeDetails"></div>
-    <a
-      class="link"
-      href="https://www.reddit.com/{{ redditPost.link }}"
-      target="_blank"
-      rel="noopener noreferrer"
-      *ngIf="redditPost.title !== '@@@@loading'"
-      >link to reddit post</a
-    >
+    <div *ngFor="let line of formatRedditPost()" class="marginTop">
+      <a *ngIf="isBold(line) === false">{{ line }}</a>
+      <a *ngIf="isBold(line)" class="title">{{ isBold(line) }}</a>
+    </div>
   </mat-card-content>
 </mat-card>

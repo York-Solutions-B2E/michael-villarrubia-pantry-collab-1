@@ -12,6 +12,16 @@ import { RedditPost } from '../Models/redditPost';
 import { User } from '../Models/User';
 import { showPage } from '../showPage';
 
+interface Comment {
+  kind: string;
+  data: CommentData;
+}
+
+interface CommentData {
+  created_utc: number;
+  body: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -32,7 +42,7 @@ export class UiService {
   $invitations = new BehaviorSubject<Invitation[]>([]);
 
   $redditPost = new BehaviorSubject<RedditPost>(
-    new RedditPost('', '', '', true)
+    new RedditPost('', '', '', '', '', 0, true)
   );
 
   constructor(private http: HttpClient, public _snackbar: MatSnackBar) {}
@@ -283,7 +293,7 @@ export class UiService {
   }
 
   getRedditTopSearch(recipeName: string) {
-    let redditPost = new RedditPost('@@@@loading', '', '', true);
+    let redditPost = new RedditPost('@@@@loading', '', '', '', '', 0, true);
     this.$redditPost.next(redditPost);
     this.http
       .get<any>(
@@ -298,6 +308,10 @@ export class UiService {
             redditPost.thumbnail =
               searchResponse.data.children[0].data.thumbnail;
             redditPost.found = true;
+            redditPost.utcCreated =
+              searchResponse.data.children[0].data.created_utc;
+            let id: string = searchResponse.data.children[0].data.id;
+            this.getRedditIngredients(id, redditPost);
             this.$redditPost.next(redditPost);
           } else {
             redditPost.found = false;
@@ -306,6 +320,23 @@ export class UiService {
         },
         error: () => {
           this.openSnackBar('error connecting to reddit');
+        },
+      });
+  }
+
+  getRedditIngredients(id: string, redditPost: RedditPost) {
+    this.http
+      .get<any>(`https://www.reddit.com/r/recipes/comments/${id}.json`)
+      .pipe(take(1))
+      .subscribe({
+        next: (response) => {
+          let comments: Comment[] = response[1].data.children;
+          for (let c of comments) {
+            if (redditPost.utcCreated - c.data.created_utc < 10000) {
+              redditPost.instructions = c.data.body;
+              break;
+            }
+          }
         },
       });
   }
@@ -325,14 +356,12 @@ export class UiService {
   }
 
   getRedirectData(redirectUrl: string | null, redditPost: RedditPost): void {
-    console.log(redirectUrl);
     if (redirectUrl) {
       this.http
         .get<any>(redirectUrl)
         .pipe(take(1))
         .subscribe({
           next: (randomRecipeResponse) => {
-            console.log(randomRecipeResponse);
             redditPost.link =
               randomRecipeResponse[0].data.children[0].data.permalink;
             redditPost.title =
