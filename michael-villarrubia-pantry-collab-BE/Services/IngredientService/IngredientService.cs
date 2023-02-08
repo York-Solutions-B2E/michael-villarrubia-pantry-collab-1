@@ -1,5 +1,6 @@
 ﻿using michael_villarrubia_pantry_collab_BE.DTOs;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using System.Net.Mail;
 using System.Reflection.Metadata.Ecma335;
 
 namespace michael_villarrubia_pantry_collab_BE.Services.IngredientService
@@ -143,6 +144,32 @@ namespace michael_villarrubia_pantry_collab_BE.Services.IngredientService
             }
 
             throw new Exception("Family not found");
+        }
+
+        public async Task<List<Ingredient>> ChangeIngredients(Recipe recipe, List<IngredientDTO> ingredientsRequest)
+        {
+            await RemoveAllIngredients(recipe.Id);
+
+            return await AddIngredient(1, ingredientsRequest, recipe.Id);
+        }
+
+        public async Task<Recipe> RemoveAllIngredients(int recipeId)
+        {
+            var recipe = await _context.Recipes
+                .Include(r => r.Ingredients)
+                .ThenInclude(i => i.RecipeIngredients)
+                .FirstOrDefaultAsync(r => r.Id == recipeId);
+
+            if (recipe == null)
+            {
+                throw new Exception("recipe not found");
+            }
+            
+            recipe.RecipeIngredients.Clear();
+            recipe.Ingredients.Clear();
+
+            await _context.SaveChangesAsync();
+            return recipe;
         }
     }
 }

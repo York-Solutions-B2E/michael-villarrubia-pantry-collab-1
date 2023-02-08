@@ -95,7 +95,50 @@ namespace michael_villarrubia_pantry_collab_BE.Services.RecipeService
                 return recipes;
             }
 
-            throw new Exception("");
+            throw new Exception("family not found");
         }
+
+        public async Task<List<Recipe>> DeleteRecipe(int familyId, int recipeId)
+        {
+            var family = await _context.Families.FindAsync(familyId);
+            var recipe = await _context.Recipes.FindAsync(recipeId);
+
+            if(family == null)
+            {
+                throw new Exception("family not found");
+            }
+            if(recipe == null) 
+            {
+                throw new Exception("recipe not found");
+            }
+
+            _context.Recipes.Remove(recipe);
+            await _context.SaveChangesAsync();
+
+            return await GetFamilyRecipes(familyId);
+        }
+
+        public async Task<List<Recipe>> EditRecipe(int recipeId, RecipeDTO recipeRequest, int familyId)
+        {
+            var recipe = await _context.Recipes
+                .Include(r => r.Ingredients)
+                .ThenInclude(i => i.RecipeIngredients)
+                .FirstOrDefaultAsync(r => r.Id == recipeId);
+
+            if(recipe == null)
+            {
+                throw new Exception("recipe not found");
+            }
+
+
+            await ingredientService.ChangeIngredients(recipe, recipeRequest.Ingredients);
+            recipe.Instructions = recipeRequest.Instructions;
+            recipe.Image = recipeRequest.Image;
+            recipe.Name = recipeRequest.Name;
+
+            await _context.SaveChangesAsync();
+
+            return await GetFamilyRecipes(familyId);
+        } 
     }
 }
