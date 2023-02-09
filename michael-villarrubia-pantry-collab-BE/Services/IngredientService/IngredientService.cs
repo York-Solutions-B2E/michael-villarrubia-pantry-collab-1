@@ -1,5 +1,6 @@
 ﻿using michael_villarrubia_pantry_collab_BE.DTOs;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using System.Net.Mail;
 using System.Reflection.Metadata.Ecma335;
 
 namespace michael_villarrubia_pantry_collab_BE.Services.IngredientService
@@ -41,11 +42,18 @@ namespace michael_villarrubia_pantry_collab_BE.Services.IngredientService
                     var existIngredient = ingredients.FirstOrDefault(existing => existing.Name == i.Name);
                     if (existIngredient != null)
                     {
+                        var index = i.recipeIngredients.FindIndex(ri => ri.IngredientId == existIngredient.Id && ri.RecipeId == recipe.Id);
+
+                        if(index == -1)
+                        {
+                            index = 0;
+                        }
+
                         var _recipeIngredient = new RecipeIngredient
                         {
                             Ingredient = existIngredient,
                             Recipe = recipe,
-                            Quantity = i.recipeIngredients[0].Quantity,
+                            Quantity = i.recipeIngredients[index].Quantity,
                         };
 
                         recipe.RecipeIngredients.Add(_recipeIngredient);
@@ -143,6 +151,32 @@ namespace michael_villarrubia_pantry_collab_BE.Services.IngredientService
             }
 
             throw new Exception("Family not found");
+        }
+
+        public async Task<List<Ingredient>> ChangeIngredients(Recipe recipe, List<IngredientDTO> ingredientsRequest)
+        {
+            await RemoveAllIngredients(recipe.Id);
+
+            return await AddIngredient(1, ingredientsRequest, recipe.Id);
+        }
+
+        public async Task<Recipe> RemoveAllIngredients(int recipeId)
+        {
+            var recipe = await _context.Recipes
+                .Include(r => r.Ingredients)
+                .ThenInclude(i => i.RecipeIngredients)
+                .FirstOrDefaultAsync(r => r.Id == recipeId);
+
+            if (recipe == null)
+            {
+                throw new Exception("recipe not found");
+            }
+            
+            recipe.RecipeIngredients.Clear();
+            recipe.Ingredients.Clear();
+
+            await _context.SaveChangesAsync();
+            return recipe;
         }
     }
 }

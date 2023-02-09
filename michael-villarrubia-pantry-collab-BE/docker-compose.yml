@@ -3,8 +3,8 @@ services:
   pantry-db:
     image: "mcr.microsoft.com/mssql/server"
     environment:
-      MSSQL_SA_PASSWORD: "Your_password123"
-      ACCEPT_EULA: "Y"
+      - SA_PASSWORD=Your_password123
+      - ACCEPT_EULA=Y
     volumes:
       - .\data:/var/opt/mssql/data
     ports:

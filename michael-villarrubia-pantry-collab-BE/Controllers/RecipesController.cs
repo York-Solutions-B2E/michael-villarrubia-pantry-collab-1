@@ -43,5 +43,31 @@ namespace michael_villarrubia_pantry_collab_BE.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpDelete]
+        public async Task<ActionResult<List<Recipe>>> DeleteRecipe(int familyId, int recipeId)
+        {
+            try
+            {
+                return Ok(await recipeService.DeleteRecipe(familyId, recipeId));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<Recipe>> EditRecipe(int recipeId, RecipeDTO recipeRequest, int familyId)
+        {
+            try
+            {
+                return Ok(await recipeService.EditRecipe(recipeId, recipeRequest, familyId));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
