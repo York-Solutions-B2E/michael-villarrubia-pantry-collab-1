@@ -1,4 +1,5 @@
 ﻿using michael_villarrubia_pantry_collab_BE.DTOs;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace michael_villarrubia_pantry_collab_BE.Services.PantryService
 {
@@ -46,7 +47,8 @@ namespace michael_villarrubia_pantry_collab_BE.Services.PantryService
                     Image = item.Image,
                     Name= item.Name,
                     QuantityInPantry= item.QuantityInPantry,
-                    Weight = item.Weight
+                    Weight = item.Weight,
+                    UnitOfMeasurement= item.UnitOfMeasurement,
                 };
 
                 pantry.Items.Add(itemToAdd);
@@ -66,6 +68,54 @@ namespace michael_villarrubia_pantry_collab_BE.Services.PantryService
                 return pantry;
             }
             throw new Exception("Family does not have a pantry or does not exist");
+        }
+
+        public async Task<Pantry> DeleteItem(int pantryId, int itemId)
+        {
+            var pantry = await _context.Pantries.Include(p => p.Items).FirstOrDefaultAsync(p => p.Id == pantryId);
+            var item = await _context.PantryItems.FindAsync(itemId);
+            
+            if(pantry == null)
+            {
+                throw new Exception("Pantry not found");
+            }
+
+            if (item == null)
+            {
+                throw new Exception("Item not found");
+            }
+
+            pantry.Items.Remove(item);
+            _context.PantryItems.Remove(item);
+            await _context.SaveChangesAsync();
+
+            return pantry;
+        }
+
+        public async Task<Pantry> EditItem(int pantryId, int itemId, PantryItemDTO itemRequest)
+        {
+            var pantry = await _context.Pantries.Include(p => p.Items).FirstOrDefaultAsync(p => p.Id == pantryId);
+            var item = await _context.PantryItems.FindAsync(itemId);
+
+            if(pantry == null)
+            {
+                throw new Exception("Pantry not found");
+            }
+
+            if (item == null)
+            {
+                throw new Exception("Item not found");
+            }
+            item.UnitOfMeasurement= itemRequest.UnitOfMeasurement;
+            item.QuantityInPantry = itemRequest.QuantityInPantry;
+            item.Calories = itemRequest.Calories;
+            item.Name = itemRequest.Name;
+            item.Weight = itemRequest.Weight;
+            item.Image= itemRequest.Image;
+
+            await _context.SaveChangesAsync();
+
+            return pantry;
         }
     }
 }

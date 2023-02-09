@@ -43,5 +43,31 @@ namespace michael_villarrubia_pantry_collab_BE.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpDelete("deleteItem")]
+        public async Task<ActionResult<Pantry>> DeleteItem(int pantryId, int itemId)
+        {
+            try
+            {
+                return Ok(await _pantryService.DeleteItem(pantryId, itemId));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("editItem")]
+        public async Task<ActionResult<Pantry>> EditItem(int pantryId, int itemId, PantryItemDTO itemRequest)
+        {
+            try
+            {
+                return Ok(await _pantryService.EditItem(pantryId, itemId, itemRequest));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
