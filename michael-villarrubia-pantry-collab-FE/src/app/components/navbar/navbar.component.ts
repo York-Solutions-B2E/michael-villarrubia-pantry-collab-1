@@ -14,9 +14,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
   familyId: number = 0;
   familyCode: string = '';
   userId: number = 0;
+  inviteAmount: number = 0;
 
   $familySub = new Subscription();
   $userIdSub = new Subscription();
+  $invitationSub = new Subscription();
 
   constructor(public uiService: UiService) {}
 
@@ -32,6 +34,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     this.$userIdSub = this.uiService.$userId.subscribe(
       (userId) => (this.userId = userId)
+    );
+
+    this.$invitationSub = this.uiService.$invitations.subscribe(
+      (invitations) => {
+        let recievedInvites = invitations.filter(
+          (i) => i.accepted === null && i.receiverFamilyId === this.familyId
+        );
+        console.log(recievedInvites.length);
+        this.inviteAmount = recievedInvites.length;
+      }
     );
   }
 

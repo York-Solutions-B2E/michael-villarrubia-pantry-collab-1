@@ -7,6 +7,7 @@ export class PantryItem {
     public image: string,
     public weight: number,
     public calories: number,
+    public unitOfMeasurement: string,
     public quantityInPantry: number,
     public pantryId: number
   ) {}

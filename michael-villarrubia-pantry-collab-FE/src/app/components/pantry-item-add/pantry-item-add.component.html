@@ -15,6 +15,14 @@
   <input matInput [(ngModel)]="item.weight" />
 </mat-form-field>
 <mat-form-field>
+  <mat-label>Unit Of Measurement</mat-label>
+  <mat-select [(ngModel)]="item.unitOfMeasurement">
+    <mat-option *ngFor="let unit of unitsOfMeasurement" [value]="unit">{{
+      unit
+    }}</mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field>
   <input matInput [(ngModel)]="item.image" placeholder="Image URL" />
 </mat-form-field>
 <button mat-raised-button color="accent" (click)="addItem()">Add Item</button>

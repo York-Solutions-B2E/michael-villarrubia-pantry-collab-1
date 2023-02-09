@@ -25,6 +25,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
   constructor(private uiService: UiService) {}
 
   ngOnInit(): void {
+    console.log('refreshed');
     this.recipeSelected;
     this.$recipesSub = this.uiService.$recipes.subscribe((recipes) => {
       this.recipes = recipes;
@@ -42,6 +43,12 @@ export class RecipesComponent implements OnInit, OnDestroy {
     this.$recipesSub.unsubscribe();
     this.$redditPostSub.unsubscribe();
     this.$ingredientsSub.unsubscribe();
+  }
+
+  refreshRecipes(): void {
+    this.uiService.getRecipes(
+      this.uiService.$familyId.value ? this.uiService.$familyId.value : 0
+    );
   }
 
   addRecipe(): void {

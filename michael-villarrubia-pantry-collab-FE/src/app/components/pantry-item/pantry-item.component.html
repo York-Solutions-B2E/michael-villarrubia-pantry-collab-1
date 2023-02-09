@@ -1,9 +1,17 @@
-<mat-card class="item">
-  <mat-card-header class="itemName">
-    <mat-card-title>
-      <b>{{ pantryItem.name }}</b>
-    </mat-card-title>
-  </mat-card-header>
+<mat-card class="item" *ngIf="edit === false">
+  <div>
+    <button mat-button class="actionButtons" (click)="deleteItem()">
+      <mat-icon>clear</mat-icon>
+    </button>
+    <button mat-button class="actionButtons" (click)="edit = true">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <mat-card-header class="itemName">
+      <mat-card-title>
+        <b>{{ pantryItem.name }}</b>
+      </mat-card-title>
+    </mat-card-header>
+  </div>
   <mat-card-content>
     <img src="{{ pantryItem.image }}" class="itemImage" alt="" />
     <div class="itemQuantities">
@@ -12,7 +20,10 @@
     <div class="itemDetails">
       Total Calories: {{ pantryItem.calories }} cal(s)
     </div>
-    <div class="itemDetails">Total Weight: {{ pantryItem.weight }} gram(s)</div>
+    <div class="itemDetails">
+      Total Weight: {{ pantryItem.weight }}
+      {{ pantryItem.unitOfMeasurement }}(s)
+    </div>
     <div class="itemQuantities" *ngIf="ingredients">Ingredients:</div>
     <div class="ingredients">
       <div class="ingredient" *ngFor="let ingredient of ingredients">
@@ -20,4 +31,45 @@
       </div>
     </div>
   </mat-card-content>
+</mat-card>
+
+<mat-card class="editItem" *ngIf="edit === true">
+  <mat-form-field class="margin">
+    <mat-label>Item Name</mat-label>
+    <input matInput [(ngModel)]="pantryItem.name" placeholder="Item Name" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Quantity</mat-label>
+    <input matInput [(ngModel)]="pantryItem.quantityInPantry" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Total Calories</mat-label>
+    <input matInput [(ngModel)]="pantryItem.calories" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Total Weight</mat-label>
+    <input matInput [(ngModel)]="pantryItem.weight" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Unit Of Measurement</mat-label>
+    <mat-select [(ngModel)]="pantryItem.unitOfMeasurement">
+      <mat-option *ngFor="let unit of unitsOfMeasurement" [value]="unit">{{
+        unit
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [(ngModel)]="pantryItem.image" placeholder="Image URL" />
+  </mat-form-field>
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="saveChanges()"
+    class="editButtons"
+  >
+    Save
+  </button>
+  <button mat-raised-button color="warn" (click)="cancel()" class="editButtons">
+    Cancel
+  </button>
 </mat-card>

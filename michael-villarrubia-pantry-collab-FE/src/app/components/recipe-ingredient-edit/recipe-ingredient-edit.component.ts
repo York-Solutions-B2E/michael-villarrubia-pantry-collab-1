@@ -11,15 +11,27 @@ export class RecipeIngredientEditComponent implements OnInit {
   @Input() recipeId: number = 0;
   @Input() index: number = 0;
   @Output() removeIngredientEvent = new EventEmitter<number>();
-  quantity: number = 0;
+  riIndex: number = 0;
+  unitsOfMeasurement: string[] = [
+    'cup',
+    'tablespoon',
+    'teaspoon',
+    'gallon',
+    'fluid ounce',
+    'ounce',
+    'pound',
+  ];
 
   ngOnInit(): void {
-    let findQuantity = this.ingredient.recipeIngredients.find(
-      (ri) =>
-        ri.ingredientId === this.ingredient.id && ri.recipeId == this.recipeId
-    )?.quantity;
-    if (findQuantity) {
-      this.quantity = findQuantity;
+    if (this.ingredient.recipeIngredients.length > 1) {
+      let findQuantity = this.ingredient.recipeIngredients.findIndex(
+        (ri) =>
+          ri.ingredientId === this.ingredient.id &&
+          ri.recipeId === this.recipeId
+      );
+      if (findQuantity) {
+        this.riIndex = findQuantity;
+      }
     }
   }
 

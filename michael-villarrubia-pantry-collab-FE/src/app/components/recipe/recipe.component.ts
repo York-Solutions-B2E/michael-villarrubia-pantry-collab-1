@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { Recipe } from 'src/app/Models/Recipe';
 import { RedditPost } from 'src/app/Models/redditPost';
 import { UiService } from 'src/app/Services/ui.service';
@@ -11,6 +18,7 @@ import { UiService } from 'src/app/Services/ui.service';
 export class RecipeComponent {
   @Input() recipe = new Recipe(0, '', '', '', '', []);
   @Input() redditPost = new RedditPost('', '', '', '', '', 0, true);
+  @Output() refresh = new EventEmitter();
   edit: boolean = false;
 
   constructor(private uiService: UiService) {}
@@ -34,5 +42,10 @@ export class RecipeComponent {
     } else {
       return false;
     }
+  }
+
+  refreshRecipes(): void {
+    this.edit = false;
+    this.refresh.emit();
   }
 }

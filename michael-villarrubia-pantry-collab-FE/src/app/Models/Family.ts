@@ -1,3 +1,4 @@
+import { Invitation } from './Invitation';
 import { Pantry } from './Pantry';
 import { User } from './User';
 
@@ -7,7 +8,7 @@ export class Family {
     public name: string,
     public code: string,
     public recipes: any[],
-    public sentInvitations: any[],
-    public receivedInvitations: any[]
+    public sentInvitations: Invitation[],
+    public receivedInvitations: Invitation[]
   ) {}
 }

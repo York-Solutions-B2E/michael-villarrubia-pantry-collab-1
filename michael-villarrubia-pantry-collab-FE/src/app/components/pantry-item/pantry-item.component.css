@@ -33,6 +33,7 @@ b {
   height: 230px;
   width: 400px;
   margin: 10px;
+  overflow-y: auto;
 }
 
 .ingredients {
@@ -43,4 +44,27 @@ b {
 .ingredient {
   margin-left: 10px;
   font-size: 14px;
+}
+
+.actionButtons {
+  float: right;
+  padding-right: 0px;
+}
+
+.editButtons {
+  width: 100px;
+  min-height: 35px;
+  margin: 7px;
+}
+
+.editItem {
+  height: 230px;
+  width: 400px;
+  margin: 10px;
+  overflow-y: auto;
+  align-items: center;
+}
+
+.margin {
+  margin-top: 10px;
 }

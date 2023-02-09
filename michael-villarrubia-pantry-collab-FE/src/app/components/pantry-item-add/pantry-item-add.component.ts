@@ -9,7 +9,17 @@ import { showPage } from 'src/app/showPage';
   styleUrls: ['./pantry-item-add.component.css'],
 })
 export class PantryItemAddComponent {
-  item = new PantryItem(0, '', '', 0, 0, 0, 0);
+  item = new PantryItem(0, '', '', 0, 0, '', 0, 0);
+
+  unitsOfMeasurement: string[] = [
+    'cup',
+    'tablespoon',
+    'teaspoon',
+    'gallon',
+    'fluid ounce',
+    'ounce',
+    'pound',
+  ];
 
   constructor(private uiService: UiService) {}
 

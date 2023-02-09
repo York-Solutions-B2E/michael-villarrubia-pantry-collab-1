@@ -26,8 +26,17 @@
   </mat-card-content>
   <mat-card-actions class="center">
     <div>
-      <button mat-raised-button class="spacing" color="primary">Save</button>
-      <button mat-raised-button class="spacing" color="warn">Cancel</button>
+      <button
+        mat-raised-button
+        class="spacing"
+        color="primary"
+        (click)="saveChanges()"
+      >
+        Save
+      </button>
+      <button mat-raised-button class="spacing" color="warn" (click)="cancel()">
+        Cancel
+      </button>
     </div>
   </mat-card-actions>
 </mat-card>

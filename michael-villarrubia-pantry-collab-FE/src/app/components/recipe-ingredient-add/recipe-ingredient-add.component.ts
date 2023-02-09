@@ -17,6 +17,15 @@ export class RecipeIngredientAddComponent {
   ingredientName = '';
   unitOfMeasurement: string = '';
   quantity: number = 0;
+  unitsOfMeasurement: string[] = [
+    'cup',
+    'tablespoon',
+    'teaspoon',
+    'gallon',
+    'fluid ounce',
+    'ounce',
+    'pound',
+  ];
 
   constructor(private uiService: UiService) {}
 

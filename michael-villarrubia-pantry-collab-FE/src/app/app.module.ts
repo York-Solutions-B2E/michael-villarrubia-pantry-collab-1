@@ -9,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
@@ -26,12 +27,12 @@ import { PantryItemAddComponent } from './components/pantry-item-add/pantry-item
 import { PantryItemComponent } from './components/pantry-item/pantry-item.component';
 import { PantryComponent } from './components/pantry/pantry.component';
 import { RecipeAddComponent } from './components/recipe-add/recipe-add.component';
+import { RecipeEditComponent } from './components/recipe-edit/recipe-edit.component';
 import { RecipeIngredientAddComponent } from './components/recipe-ingredient-add/recipe-ingredient-add.component';
+import { RecipeIngredientEditComponent } from './components/recipe-ingredient-edit/recipe-ingredient-edit.component';
 import { RecipeIngredientsComponent } from './components/recipe-ingredients/recipe-ingredients.component';
 import { RecipeComponent } from './components/recipe/recipe.component';
 import { RecipesComponent } from './components/recipes/recipes.component';
-import { RecipeEditComponent } from './components/recipe-edit/recipe-edit.component';
-import { RecipeIngredientEditComponent } from './components/recipe-ingredient-edit/recipe-ingredient-edit.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { RecipeIngredientEditComponent } from './components/recipe-ingredient-ed
     MatBadgeModule,
     MatCardModule,
     MatChipsModule,
+    MatSelectModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

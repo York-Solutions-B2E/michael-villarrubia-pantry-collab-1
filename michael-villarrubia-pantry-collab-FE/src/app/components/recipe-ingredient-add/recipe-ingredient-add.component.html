@@ -16,12 +16,12 @@
   <input matInput [(ngModel)]="quantity" />
 </mat-form-field>
 <mat-form-field class="unit">
-  <mat-label>Unit</mat-label>
-  <input
-    matInput
-    [(ngModel)]="ingredient.unitOfMeasurement"
-    placeholder="Unit"
-  />
+  <mat-label>Unit Of Measurement</mat-label>
+  <mat-select [(ngModel)]="ingredient.unitOfMeasurement">
+    <mat-option *ngFor="let unit of unitsOfMeasurement" [value]="unit">{{
+      unit
+    }}</mat-option>
+  </mat-select>
 </mat-form-field>
 <button
   mat-stroked-button

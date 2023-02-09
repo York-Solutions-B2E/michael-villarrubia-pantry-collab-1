@@ -93,6 +93,7 @@ export class UiService {
             this.getPantry(user.familyId);
             this.getFamily(user.familyId);
             this.getRecipes(user.familyId);
+            this.getInvitations(user.familyId);
           } else {
             this.$currentPage.next(showPage.joinFamily);
           }
@@ -123,6 +124,39 @@ export class UiService {
       .post<Pantry>(
         `https://localhost:7201/api/Pantries/addItem?familyId=${this.$familyId.value}`,
         item
+      )
+      .pipe(take(1))
+      .subscribe({
+        next: (pantry) => {
+          this.$pantry.next(pantry);
+        },
+        error: (err) => {
+          this.openSnackBar(err.error);
+        },
+      });
+  }
+
+  deletePantryItem(pantryId: number, itemId: number) {
+    this.http
+      .delete<Pantry>(
+        `https://localhost:7201/api/Pantries/deleteItem?pantryId=${pantryId}&itemId=${itemId}`
+      )
+      .pipe(take(1))
+      .subscribe({
+        next: (pantry) => {
+          this.$pantry.next(pantry);
+        },
+        error: (err) => {
+          this.openSnackBar(err.error);
+        },
+      });
+  }
+
+  editPantryItem(pantryId: number, itemId: number, pantryItem: PantryItem) {
+    this.http
+      .put<Pantry>(
+        `https://localhost:7201/api/Pantries/editItem?pantryId=${pantryId}&itemId=${itemId}`,
+        pantryItem
       )
       .pipe(take(1))
       .subscribe({
@@ -312,7 +346,6 @@ export class UiService {
               searchResponse.data.children[0].data.created_utc;
             let id: string = searchResponse.data.children[0].data.id;
             this.getRedditIngredients(id, redditPost);
-            this.$redditPost.next(redditPost);
           } else {
             redditPost.found = false;
             this.getRandomRedditRecipe(redditPost);
@@ -332,8 +365,12 @@ export class UiService {
         next: (response) => {
           let comments: Comment[] = response[1].data.children;
           for (let c of comments) {
-            if (redditPost.utcCreated - c.data.created_utc < 10000) {
+            if (
+              redditPost.utcCreated - c.data.created_utc < 5000 &&
+              c.data.body.includes('**')
+            ) {
               redditPost.instructions = c.data.body;
+              this.$redditPost.next(redditPost);
               break;
             }
           }
@@ -417,11 +454,15 @@ export class UiService {
         next: (recipes) => {
           this.$recipes.next(recipes);
         },
+        error: (err) => {
+          this.openSnackBar(err.error);
+        },
       });
   }
 
   logout(): void {
     this.$familyId.next(null);
+    this.$family.next(new Family(0, '', '', [], [], []));
     this.$ingredients.next([]);
     this.$invitations.next([]);
     this.$recipes.next([]);

@@ -4,11 +4,19 @@
 </mat-form-field>
 <mat-form-field class="qty">
   <mat-label>Qty</mat-label>
-  <input matInput type="number" [(ngModel)]="quantity" />
+  <input
+    matInput
+    type="number"
+    [(ngModel)]="ingredient.recipeIngredients[riIndex].quantity"
+  />
 </mat-form-field>
 <mat-form-field class="unit">
-  <mat-label>Unit</mat-label>
-  <input matInput [(ngModel)]="ingredient.unitOfMeasurement" />
+  <mat-label>Unit Of Measurement</mat-label>
+  <mat-select [(ngModel)]="ingredient.unitOfMeasurement">
+    <mat-option *ngFor="let unit of unitsOfMeasurement" [value]="unit">{{
+      unit
+    }}</mat-option>
+  </mat-select>
 </mat-form-field>
 <button mat-button (click)="delete()" class="clearButton">
   <mat-icon>clear</mat-icon>

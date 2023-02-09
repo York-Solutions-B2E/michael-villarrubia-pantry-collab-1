@@ -27,7 +27,10 @@
       class="label"
       *ngIf="recipe.instructions.length > 0; else noInstructions"
     >
-      Directions: {{ recipe.instructions }}
+      Directions:
+    </div>
+    <div class="recipeDetails">
+      {{ recipe.instructions }}
     </div>
     <ng-template #noInstructions
       ><div>Recipe has no directions</div></ng-template
@@ -35,22 +38,21 @@
   </mat-card-content>
 </mat-card>
 
-<app-recipe-edit *ngIf="edit === true" [recipe]="recipe"></app-recipe-edit>
+<app-recipe-edit
+  *ngIf="edit === true"
+  [recipe]="recipe"
+  (doneEditingEvent)="refreshRecipes()"
+></app-recipe-edit>
 
 <mat-card class="recipe">
   <div class="cardTop">
-    <button mat-button class="actionButtons">
-      <mat-icon>clear</mat-icon>
-    </button>
     <mat-card-header class="recipeName">
       <mat-card-title>
         <b *ngIf="redditPost.title === '@@@@loading'; else header"
           >Loading...</b
         >
         <ng-template #header>
-          <b *ngIf="redditPost.found; else random"
-            >Reddit Recipe: {{ recipe.name }}</b
-          >
+          <b *ngIf="redditPost.found; else random">Reddit Recipe</b>
           <ng-template #random
             ><b
               >Reddit doesn't have a recipe for {{ recipe.name }}, here's a
